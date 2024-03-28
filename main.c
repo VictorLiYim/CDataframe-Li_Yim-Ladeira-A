@@ -6,6 +6,6 @@
 
 int main(){
     COLUMN *mycol = create_column("My column");
-    printf("%s", mycol);
+    printf("%s test", mycol->name);
     return 0;
 }
