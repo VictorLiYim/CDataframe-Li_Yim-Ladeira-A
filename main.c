@@ -2,8 +2,10 @@
 // Created by Victor Li Yim on 28/03/2024.
 //
 #include<stdio.h>
+#include "functions.h"
 
 int main(){
-    printf("bonjour");
+    COLUMN *mycol = create_column("My column");
+    printf("%s", mycol);
     return 0;
 }
