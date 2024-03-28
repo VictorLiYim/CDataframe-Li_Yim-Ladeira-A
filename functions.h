@@ -1,4 +1,3 @@
-
 #ifndef CDATAFRAME_LI_YIM_LADEIRA_A_FUNCTIONS_H
 #define CDATAFRAME_LI_YIM_LADEIRA_A_FUNCTIONS_H
 
@@ -9,7 +8,6 @@ typedef struct
     char *name;
     int data;
 }COLUMN;
-
 
 COLUMN *create_column(char* title);
 
