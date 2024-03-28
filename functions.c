@@ -2,7 +2,7 @@
 #include <stdlib.h>
 COLUMN *create_column(char* title)
 {
-    COLUMN *column;
+    COLUMN *column = NULL;
     column->TP = REALOC_SIZE;
     column->TL = 0;
     column->name = title;

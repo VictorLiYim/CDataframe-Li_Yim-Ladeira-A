@@ -6,9 +6,9 @@
 typedef struct
 {
     char *name;
-    int data;
     int TP;
     int *TL;
+    int *data;
 }COLUMN;
 
 COLUMN *create_column(char* title);
