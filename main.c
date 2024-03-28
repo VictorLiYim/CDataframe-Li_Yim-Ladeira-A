@@ -5,7 +5,8 @@
 #include "functions.h"
 
 int main(){
+    printf("test\n");
     COLUMN *mycol = create_column("My column");
-    printf("%s test", mycol->name);
+    printf("test");
     return 0;
 }
