@@ -6,8 +6,8 @@
 typedef struct
 {
     char *name;
-    int *TP;
-    int *TL;
+    int TP;
+    int TL;
     int *data;
 }COLUMN;
 
