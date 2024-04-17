@@ -20,12 +20,16 @@ COLUMN *create_column(char* title);
 int insert_value(COLUMN* col, int value);
 void delete_column(COLUMN **col);
 void print_col(COLUMN* col);
+
 int nb_occurrences(COLUMN* col, int x);
 int search_val(COLUMN* col, int x);
 int research_sup(COLUMN* col, int x);
 int research_inf(COLUMN* col, int x);
 int research_equal(COLUMN* col, int x);
+
 CDataframe* create_dataframe(int num_columns);
 int add_column(CDataframe* dataframe, char* title);
 void read_Dataframe(CDataframe* dataframe);
+void read_cdataframe_hardway(CDataframe* cdataframe);
+
 #endif //CDATAFRAME_LI_YIM_LADEIRA_A_FUNCTIONS_H

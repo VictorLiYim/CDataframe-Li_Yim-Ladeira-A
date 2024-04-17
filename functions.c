@@ -5,18 +5,16 @@
 
 COLUMN *create_column(char* title)
 {
-    COLUMN *col = malloc(sizeof(COLUMN)); // Allouer de la mémoire pour la colonne
+    COLUMN *col = (COLUMN*) malloc(sizeof(COLUMN)); // Allouer de la mémoire pour la colonne
     if (col == NULL) {
         printf("Erreur lors de l'allocation mémoire\n");
         exit(EXIT_FAILURE);
     }
-    COLUMN *column = NULL;
-    column = malloc(sizeof(COLUMN));
-    column->TP = 0;
-    column->TL = 0;
-    column->name = title;
-    column->data = NULL;
-    return column;
+    col->TP = 0;
+    col->TL = 0;
+    col->name = title;
+    col->data = NULL;
+    return col;
 }
 
 // Fonction pour ajouter un entier à la colonne
@@ -152,7 +150,7 @@ void read_CDataframe(CDataframe* dataframe) {
         return;
     }
     for (int i = 0; i < dataframe->num_columns; i++) {
-        printf("Filling column %d\n", i);
+        printf("Colonne %d\n", i);
         int value;
         do {
             printf("Enter value (or -1 to stop): ");
@@ -163,3 +161,32 @@ void read_CDataframe(CDataframe* dataframe) {
         } while (value != -1);
     }
 }
+
+//Remplissage en dur du CDataframe
+
+// Fonction pour remplir un CDataframe avec des données prédéfinies
+void read_cdataframe_hardway(CDataframe* dataframe) {
+    if (dataframe == NULL) {
+        printf("Dataframe is NULL\n");
+        return;
+    }
+
+    // Exemple de données prédéfinies pour chaque colonne
+    int data[][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    for (int i = 0; i < dataframe->num_columns; i++) {
+        // Créer une nouvelle colonne
+        COLUMN* column = create_column("Column");
+        // Remplir la colonne avec les données prédéfinies
+        for (int j = 0; j < 3; j++) {
+            if (!insert_value(column, data[i][j])) {
+                printf("Failed to insert value into column\n");
+                delete_column(&column); // Libérer la mémoire de la colonne en cas d'échec
+                return; // Sortir de la fonction sans ajouter de colonnes si l'insertion échoue
+            }
+        }
+
+        // Assigner la colonne au dataframe
+        dataframe->columns[i] = column;
+    }
+}
+
