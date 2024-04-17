@@ -162,7 +162,19 @@ void read_CDataframe(CDataframe* dataframe) {
     }
 }
 
-//Remplissage en dur du CDataframe
+// Fonction pour libérer un CDataframe
+void delete_dataframe(CDataframe** dataframe) {
+    if (dataframe == NULL || *dataframe == NULL) {
+        printf("Dataframe is NULL\n");
+        return;
+    }
+    for (int i = 0; i < (*dataframe)->num_columns; i++) {
+        delete_column(&((*dataframe)->columns[i]));
+    }
+    free((*dataframe)->columns);
+    free(*dataframe);
+    *dataframe = NULL;
+}
 
 // Fonction pour remplir un CDataframe avec des données prédéfinies
 void read_cdataframe_hardway(CDataframe* dataframe) {
@@ -190,3 +202,16 @@ void read_cdataframe_hardway(CDataframe* dataframe) {
     }
 }
 
+// Fonction pour afficher tout le CDataframe
+void print_dataframe(CDataframe* dataframe) {
+    if (dataframe == NULL) {
+        printf("Dataframe is NULL\n");
+        return;
+    }
+    printf("Printing CDataframe:\n");
+    for (int i = 0; i < dataframe->num_columns; i++) {
+        printf("Column %d (%s):\n", i, dataframe->columns[i]->name);
+        print_col(dataframe->columns[i]); // Supposons que vous avez déjà une fonction print_col pour afficher une colonne
+        printf("\n");
+    }
+}
