@@ -7,7 +7,7 @@ COLUMN *create_column(char* title)
 {
     COLUMN *col = malloc(sizeof(COLUMN)); // Allouer de la mémoire pour la colonne
     if (col == NULL) {
-        printf(stderr, "Erreur lors de l'allocation mémoire\n");
+        printf("Erreur lors de l'allocation mémoire\n");
         exit(EXIT_FAILURE);
     }
     COLUMN *column = NULL;
@@ -126,29 +126,39 @@ CDataframe* create_dataframe(int num_columns) {
 // Fonction pour ajouter une colonne à un CDataframe
 int add_column(CDataframe* dataframe, char* title) {
     if (dataframe == NULL) {
-        printf("Dataframe is NULL\n");
         return 0;
     }
     COLUMN* new_column = create_column(title);
     if (new_column == NULL) {
-        printf("Failed to create column\n");
         return 0;
     }
     int num_columns = dataframe->num_columns;
-    dataframe->columns = (COLUMN**)realloc(dataframe->columns, (num_columns + 1) * sizeof(COLUMN*));
-    if (dataframe->columns == NULL) {
+    COLUMN** temp = (COLUMN**)realloc(dataframe->columns, (num_columns + 1) * sizeof(COLUMN*));
+    if (temp == NULL) {
         printf("Memory reallocation failed\n");
         delete_column(&new_column);
         return 0;
     }
+    dataframe->columns = temp;
     dataframe->columns[num_columns] = new_column;
     dataframe->num_columns++;
     return 1;
 }
-/*
-Cdataframe *create_Cdataframe(){
-    Cdataframe *CDataframe = malloc(sizeof(Cdataframe));
-    Cdataframe->column = NULL;
-    Cdataframe->nbcolumn = 0;
-    return Cdataframe;
-}*/
+
+// Fonction pour remplir un CDataframe à partir de saisies utilisateur
+void read_CDataframe(CDataframe* dataframe) {
+    if (dataframe == NULL) {
+        printf("Dataframe is NULL\n");
+        return;
+    }
+    for (int i = 0; i < dataframe->num_columns; i++) {
+        printf("Filling column %d\n", i);
+        int value;
+        do {
+            printf("Enter value (or -1 to stop): ");
+            scanf("%d", &value);
+            if (value != -1) {
+                insert_value(dataframe->columns[i], value);
+            }
+        } while (value != -1);
+    }

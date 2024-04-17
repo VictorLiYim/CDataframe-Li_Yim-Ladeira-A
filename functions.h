@@ -27,5 +27,5 @@ int research_inf(COLUMN* col, int x);
 int research_equal(COLUMN* col, int x);
 CDataframe* create_dataframe(int num_columns);
 int add_column(CDataframe* dataframe, char* title);
-
+void read_Dataframe(CDataframe* dataframe);
 #endif //CDATAFRAME_LI_YIM_LADEIRA_A_FUNCTIONS_H
