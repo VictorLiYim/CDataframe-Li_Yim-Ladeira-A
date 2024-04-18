@@ -28,11 +28,11 @@ int research_inf(COLUMN* col, int x);
 int research_equal(COLUMN* col, int x);
 
 CDataframe* create_dataframe(int num_columns);
-int add_column(CDataframe* dataframe, char* title);
-void delete_dataframe(CDataframe** dataframe);
-void read_Dataframe(CDataframe* dataframe);
+int add_column(CDataframe* cdataframe, char* title);
+void delete_dataframe(CDataframe** cdataframe);
+void read_Dataframe(CDataframe* cdataframe);
 void read_cdataframe_hardway(CDataframe* cdataframe);
 
-void print_dataframe(CDataframe* dataframe);
-
+void print_dataframe(CDataframe* cdataframe);
+void print_raws(CDataframe* cdataframe)
 #endif //CDATAFRAME_LI_YIM_LADEIRA_A_FUNCTIONS_H

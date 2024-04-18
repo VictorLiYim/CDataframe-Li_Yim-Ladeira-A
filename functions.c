@@ -122,68 +122,68 @@ CDataframe* create_dataframe(int num_columns) {
 }
 
 // Fonction pour ajouter une colonne à un CDataframe
-int add_column(CDataframe* dataframe, char* title) {
-    if (dataframe == NULL) {
+int add_column(CDataframe* cdataframe, char* title) {
+    if (cdataframe == NULL) {
         return 0;
     }
     COLUMN* new_column = create_column(title);
-    int num_columns = dataframe->num_columns;
-    COLUMN** temp = (COLUMN**)realloc(dataframe->columns, (num_columns + 1) * sizeof(COLUMN*));
+    int num_columns = cdataframe->num_columns;
+    COLUMN** temp = (COLUMN**)realloc(cdataframe->columns, (num_columns + 1) * sizeof(COLUMN*));
     if (temp == NULL) {
         printf("Memory reallocation failed\n");
         delete_column(&new_column);
         return 0;
     }
-    dataframe->columns = temp;
-    dataframe->columns[num_columns] = new_column;
-    dataframe->num_columns++;
+    cdataframe->columns = temp;
+    cdataframe->columns[num_columns] = new_column;
+    cdataframe->num_columns++;
     return 1;
 }
 
 // Fonction pour remplir un CDataframe à partir de saisies utilisateur
-void read_CDataframe(CDataframe* dataframe) {
-    if (dataframe == NULL) {
+void read_CDataframe(CDataframe* cdataframe) {
+    if (cdataframe == NULL) {
         printf("Dataframe is NULL\n");
         return;
     }
-    for (int i = 0; i < dataframe->num_columns; i++) {
+    for (int i = 0; i < cdataframe->num_columns; i++) {
         printf("Colonne %d\n", i);
         int value;
         do {
             printf("Enter value (or -1 to stop): ");
             scanf("%d", &value);
             if (value != -1) {
-                insert_value(dataframe->columns[i], value);
+                insert_value(cdataframe->columns[i], value);
             }
         } while (value != -1);
     }
 }
 
 // Fonction pour libérer un CDataframe
-void delete_dataframe(CDataframe** dataframe) {
-    if (dataframe == NULL || *dataframe == NULL) {
+void delete_dataframe(CDataframe** cdataframe) {
+    if (cdataframe == NULL || *cdataframe == NULL) {
         printf("Dataframe is NULL\n");
         return;
     }
-    for (int i = 0; i < (*dataframe)->num_columns; i++) {
-        delete_column(&((*dataframe)->columns[i]));
+    for (int i = 0; i < (*cdataframe)->num_columns; i++) {
+        delete_column(&((*cdataframe)->columns[i]));
     }
-    free((*dataframe)->columns);
-    free(*dataframe);
-    *dataframe = NULL;
+    free((*cdataframe)->columns);
+    free(*cdataframe);
+    *cdataframe = NULL;
 }
 
 // Fonction pour remplir un CDataframe avec des données prédéfinies
-void read_cdataframe_hardway(CDataframe* dataframe) {
+void read_cdataframe_hardway(CDataframe* cdataframe) {
     int i, j;
-    if (dataframe == NULL) {
+    if (cdataframe == NULL) {
         printf("Erreur\n");
         return;
     }
 
     // Exemple de données prédéfinies pour chaque colonne
     int data[][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    for (i = 0; i < dataframe->num_columns; i++) {
+    for (i = 0; i < cdataframe->num_columns; i++) {
         // Créer une nouvelle colonne
         COLUMN* column = create_column("Column");
         // Remplir la colonne avec les données prédéfinies
@@ -195,20 +195,20 @@ void read_cdataframe_hardway(CDataframe* dataframe) {
             }
         }
         // Assigner la colonne au dataframe
-        dataframe->columns[i] = column;
+        cdataframe->columns[i] = column;
     }
 }
 
 // Fonction pour afficher tout le CDataframe
-void print_dataframe(CDataframe* dataframe) {
-    if (dataframe == NULL) {
+void print_dataframe(CDataframe* cdataframe) {
+    if (cdataframe == NULL) {
         printf("Dataframe is NULL\n");
         return;
     }
     printf("Printing CDataframe:\n");
-    for (int i = 0; i < dataframe->num_columns; i++) {
-        printf("%s\n", dataframe->columns[i]->name);
-        print_col(dataframe->columns[i]);
+    for (int i = 0; i < cdataframe->num_columns; i++) {
+        printf("%s\n", cdataframe->columns[i]->name);
+        print_col(cdataframe->columns[i]);
         printf("\n");
     }
 }
