@@ -127,9 +127,6 @@ int add_column(CDataframe* dataframe, char* title) {
         return 0;
     }
     COLUMN* new_column = create_column(title);
-    if (new_column == NULL) {
-        return 0;
-    }
     int num_columns = dataframe->num_columns;
     COLUMN** temp = (COLUMN**)realloc(dataframe->columns, (num_columns + 1) * sizeof(COLUMN*));
     if (temp == NULL) {
@@ -178,25 +175,25 @@ void delete_dataframe(CDataframe** dataframe) {
 
 // Fonction pour remplir un CDataframe avec des données prédéfinies
 void read_cdataframe_hardway(CDataframe* dataframe) {
+    int i, j;
     if (dataframe == NULL) {
-        printf("Dataframe is NULL\n");
+        printf("Erreur\n");
         return;
     }
 
     // Exemple de données prédéfinies pour chaque colonne
     int data[][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    for (int i = 0; i < dataframe->num_columns; i++) {
+    for (i = 0; i < dataframe->num_columns; i++) {
         // Créer une nouvelle colonne
         COLUMN* column = create_column("Column");
         // Remplir la colonne avec les données prédéfinies
-        for (int j = 0; j < 3; j++) {
+        for (j = 0; j < 3; j++) {
             if (!insert_value(column, data[i][j])) {
                 printf("Failed to insert value into column\n");
                 delete_column(&column); // Libérer la mémoire de la colonne en cas d'échec
                 return; // Sortir de la fonction sans ajouter de colonnes si l'insertion échoue
             }
         }
-
         // Assigner la colonne au dataframe
         dataframe->columns[i] = column;
     }
@@ -210,8 +207,9 @@ void print_dataframe(CDataframe* dataframe) {
     }
     printf("Printing CDataframe:\n");
     for (int i = 0; i < dataframe->num_columns; i++) {
-        printf("Column %d (%s):\n", i, dataframe->columns[i]->name);
-        print_col(dataframe->columns[i]); // Supposons que vous avez déjà une fonction print_col pour afficher une colonne
+        printf("%s\n", dataframe->columns[i]->name);
+        print_col(dataframe->columns[i]);
         printf("\n");
     }
 }
+
