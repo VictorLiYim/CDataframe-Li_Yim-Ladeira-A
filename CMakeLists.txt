@@ -6,4 +6,8 @@ set(CMAKE_C_STANDARD 11)
 add_executable(CDataframe_Li_Yim_Ladeira_A
         main.c
         functions.h
-        functions.c)
+        functions.c
+        cdataframe.h
+        cdataframe.c
+        column.h
+        column.c)
