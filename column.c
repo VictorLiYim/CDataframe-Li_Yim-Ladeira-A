@@ -4,6 +4,7 @@
 #include "column.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 COLUMN *create_column(char* title)
 {
     COLUMN *col = (COLUMN*) malloc(sizeof(COLUMN)); // Allouer de la mémoire pour la colonne
@@ -13,7 +14,7 @@ COLUMN *create_column(char* title)
     }
     col->TP = 0;
     col->TL = 0;
-    col->name = title;
+    col->name = strdup(title);
     col->data = NULL;
     return col;
 }

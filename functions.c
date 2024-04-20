@@ -1,7 +1,4 @@
 #include "functions.h"
-#include <stdlib.h>
-#include <stdio.h>
-
 
 int nb_occurrences(COLUMN* col, int x){ //Retourner le nombre de d’occurrences d’une valeur x (x donné en paramètre).
     int i, count = 0;
