@@ -10,29 +10,26 @@ int main() {
     int num_columns;
     printf("Enter the number of columns: ");
     scanf("%d", &num_columns);
+    CDataframe* cdataframe = create_CDataframe(num_columns);
 
-    // Créer un CDataframe avec les titres de colonne spécifiés par l'utilisateur
-    COLUMN** cdataframe = create_CDataframe(num_columns);
-    if (cdataframe == NULL) {
-        printf("Failed to create dataframe\n");
-        return EXIT_FAILURE;
-    }
-
-    // Lire les valeurs pour chaque colonne
-    read_CDataframe_hardway(cdataframe, num_columns);
+    // Demander à l'utilisateur de saisir les données pour chaque colonne
+    read_cdataframe_hardway(cdataframe);
 
     // Afficher le CDataframe
-    print_CDataframe(cdataframe, num_columns);
-    print_CDataframe_limited_raw(cdataframe, num_columns);
-    print_CDataframe_limited_columns(cdataframe, num_columns);
-    // Libérer la mémoire allouée pour chaque colonne
-    for (int i = 0; i < num_columns; i++) {
-        free(cdataframe[i]->data);
-        free(cdataframe[i]);
+    add_column(cdataframe);
+    print_CDataframe(cdataframe);
+    print_CDataframe_limited_raw(cdataframe);
+    print_CDataframe_limited_columns(cdataframe);
+    // Libérer la mémoire allouée pour le CDataframe
+    for (int i = 0; i < cdataframe->num_columns; i++) {
+        free(cdataframe->columns[i]->data);
+        free(cdataframe->columns[i]->name);
+        free(cdataframe->columns[i]);
     }
-    // Libérer le tableau de pointeurs de colonnes
+    free(cdataframe->columns);
     free(cdataframe);
 
     return 0;
 }
+
 

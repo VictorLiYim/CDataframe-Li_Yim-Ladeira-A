@@ -7,10 +7,17 @@
 
 #include "column.h"
 
-COLUMN** create_CDataframe(int num_columns);
-void read_CDataframe(COLUMN** columns, int num_columns);
-void read_CDataframe_hardway(COLUMN** cdataframe, int num_columns);
-void print_CDataframe(COLUMN** columns, int num_columns);
-void print_CDataframe_limited_raw(COLUMN** cdataframe, int num_columns);
-void print_CDataframe_limited_columns(COLUMN** cdataframe, int num_columns);
+typedef struct {
+    COLUMN** columns;  // Tableau de pointeurs vers les colonnes
+    int num_columns;   // Nombre de colonnes
+} CDataframe;
+
+CDataframe* create_CDataframe(int num_columns);
+void read_CDataframe(CDataframe* cdataframe);
+void print_CDataframe(CDataframe* cdataframe);
+void read_cdataframe_hardway(CDataframe* cdataframe);
+void print_CDataframe_limited_raw(CDataframe* cdataframe);
+void print_CDataframe_limited_columns(CDataframe* cdatafram);
+void add_column(CDataframe* cdataframe);
+
 #endif //CDATAFRAME_LI_YIM_LADEIRA_A_CDATAFRAME_H
