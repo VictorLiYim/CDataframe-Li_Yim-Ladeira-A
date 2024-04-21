@@ -4,4 +4,8 @@ project(CDataframe_Li_Yim_Ladeira_A C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(CDataframe_Li_Yim_Ladeira_A
-        main.c)
+        main.c
+        cdataframe.h
+        cdataframe.c
+        column.h
+        column.c)
