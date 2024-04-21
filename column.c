@@ -44,16 +44,16 @@ int insert_value(COLUMN* col, int value){
     return 1;
 }
 
-void delete_column(COLUMN **col){
+void delete_column(COLUMN **col) {
     if (col == NULL || *col == NULL) {
-        printf("Column NULL\n");
+        printf("Invalid column\n");
         return;
     }
+
     // Libérer le tableau de données
     free((*col)->data);
     // Libérer la structure de colonne
     free(*col);
-    // Définir le pointeur de colonne sur NULL pour éviter les accès accidentels
     *col = NULL;
 }
 
@@ -64,4 +64,43 @@ void print_col(COLUMN* col){
     }
 }
 
-#include "column.h"
+int nb_occurrences(COLUMN* col, int x){ //Retourner le nombre de d’occurrences d’une valeur x (x donné en paramètre).
+    int i, count = 0;
+    for(i=0; i<col->TL; i++){
+        if(col->data[i]==x){
+            count++;
+        }
+    }
+    return count;
+}
+int search_val(COLUMN* col, int x){ //Retourner la valeur présente à la position x (x donné en paramètre).
+    return col->data[x];
+}
+
+int research_sup(COLUMN* col, int x){ // Retourner le nombre de valeurs qui sont supérieures à x (x donné en paramètre).
+    int i, count = 0;
+    for(i=0; i<col->TL; i++){
+        if(col->data[i]>x){
+            count++;
+        }
+    }
+    return count;
+}
+int research_inf(COLUMN* col, int x){ //Retourner le nombre de valeurs qui sont inférieures à x (x donné en paramètre).
+    int i, count = 0;
+    for(i=0; i<col->TL; i++){
+        if(col->data[i]<x){
+            count++;
+        }
+    }
+    return count;
+}
+int research_equal(COLUMN* col, int x){ //Retourner le nombre de valeurs qui sont égales à x (x donné en paramètre).
+    int i, count = 0;
+    for(i=0; i<col->TL; i++){
+        if(col->data[i]==x){
+            count++;
+        }
+    }
+    return count;
+}

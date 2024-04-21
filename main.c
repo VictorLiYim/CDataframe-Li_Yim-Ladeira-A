@@ -3,7 +3,7 @@
 //
 #include<stdio.h>
 #include<stdlib.h>
-#include "functions.h"
+#include "cdataframe.h"
 #include<string.h>
 
 int main() {
@@ -16,15 +16,21 @@ int main() {
     read_cdataframe_hardway(cdataframe);
 
     // Afficher le CDataframe
+    add_raw(cdataframe);
     add_column(cdataframe);
+    delete_raw(cdataframe);
+    delete_columncdf(cdataframe);
     print_CDataframe(cdataframe);
-    print_CDataframe_limited_raw(cdataframe);
-    print_CDataframe_limited_columns(cdataframe);
+    rename_title(cdataframe);
+    search(cdataframe);
+    search(cdataframe);
+    print_CDataframe(cdataframe);
+    printf("%d", verify(cdataframe));
+    print_name(cdataframe);
+
     // Libérer la mémoire allouée pour le CDataframe
     for (int i = 0; i < cdataframe->num_columns; i++) {
-        free(cdataframe->columns[i]->data);
-        free(cdataframe->columns[i]->name);
-        free(cdataframe->columns[i]);
+        delete_column(cdataframe->columns[i]);
     }
     free(cdataframe->columns);
     free(cdataframe);
