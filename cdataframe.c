@@ -42,12 +42,12 @@ void read_CDataframe(CDataframe* cdataframe) {
     for (int i = 0; i < cdataframe->num_columns; i++) {
         printf("Column %d:\n", i + 1);
         int nb_value;
-        printf("Enter the number of values for column %d: ", i + 1);
+        printf("Entrez le nombre de valeurs de la colonnes %d: ", i + 1);
         scanf("%d", &nb_value);
-        printf("Enter values for column %d:\n", i + 1);
+        printf("Entrez les valeurs de la colonne %d:\n", i + 1);
         for (int j = 0; j < nb_value; j++) {
             int value;
-            printf("Enter value for row %d: ", j + 1);
+            printf("Entrez la valeur de la ligne %d: ", j + 1);
             scanf("%d", &value);
             insert_value(cdataframe->columns[i], value);
         }
@@ -56,8 +56,8 @@ void read_CDataframe(CDataframe* cdataframe) {
 
 void read_cdataframe_hardway(CDataframe* dataframe) {
     if (dataframe == NULL) {
-        printf("Dataframe is NULL\n");
-        return;
+        printf("ERREUR\n");
+        exit(EXIT_FAILURE);
     }
 
     // Exemple de données prédéfinies pour chaque colonne
@@ -86,8 +86,8 @@ void print_CDataframe_limited_raw(CDataframe* cdataframe){
     printf("Combien de lignes voulez vous afficher : ");
     scanf("%d", &limit);
     for(i = 0; i<cdataframe->num_columns; i++){
-        printf("Column %d (%s):\n", i + 1, cdataframe->columns[i]->name);
-        printf("Values:\n");
+        printf("Colonne %d (%s):\n", i + 1, cdataframe->columns[i]->name);
+        printf("Valeur:\n");
         for(j = 0; j<limit; j++){
             if(cdataframe->columns[i]->data[j]!=NULL) {
                 printf("[%d] %d\n", j, cdataframe->columns[i]->data[j]);
@@ -103,8 +103,8 @@ void print_CDataframe_limited_columns(CDataframe* cdataframe){
         scanf("%d", &limit);
     }while(limit>cdataframe->num_columns);
     for(i = 0; i<limit; i++){
-        printf("Column %d (%s):\n", i + 1, cdataframe->columns[i]->name);
-        printf("Values:\n");
+        printf("Colonne %d (%s):\n", i + 1, cdataframe->columns[i]->name);
+        printf("Valeurs:\n");
         for(j = 0; j<cdataframe->columns[i]->TL; j++){
             printf("[%d] %d\n", j, cdataframe->columns[i]->data[j]);
         }

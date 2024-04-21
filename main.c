@@ -8,14 +8,12 @@
 
 int main() {
     int num_columns;
-    printf("Enter the number of columns: ");
+    printf("Entrez le nombre de colonnes que vous souhaitez afficher: ");
     scanf("%d", &num_columns);
     CDataframe* cdataframe = create_CDataframe(num_columns);
-
-    // Demander à l'utilisateur de saisir les données pour chaque colonne
-    read_cdataframe_hardway(cdataframe);
-
-    // Afficher le CDataframe
+    // Demande à l'utilisateur
+    read_CDataframe(cdataframe);
+    // Afficher le CDataframe avec utilisation de quelques
     add_raw(cdataframe);
     add_column(cdataframe);
     delete_raw(cdataframe);
@@ -25,16 +23,16 @@ int main() {
     search(cdataframe);
     search(cdataframe);
     print_CDataframe(cdataframe);
-    printf("%d", verify(cdataframe));
+    printf("%d\n", verify(cdataframe));
     print_name(cdataframe);
-
     // Libérer la mémoire allouée pour le CDataframe
     for (int i = 0; i < cdataframe->num_columns; i++) {
-        delete_column(cdataframe->columns[i]);
+        free(cdataframe->columns[i]->data);
+        free(cdataframe->columns[i]->name);
+        free(cdataframe->columns[i]);
     }
     free(cdataframe->columns);
     free(cdataframe);
-
     return 0;
 }
 

@@ -46,10 +46,9 @@ int insert_value(COLUMN* col, int value){
 
 void delete_column(COLUMN **col) {
     if (col == NULL || *col == NULL) {
-        printf("Invalid column\n");
+        printf("ERREUR\n");
         return;
     }
-
     // Libérer le tableau de données
     free((*col)->data);
     // Libérer la structure de colonne
