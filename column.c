@@ -1,6 +1,3 @@
-//
-// Created by Victor Li Yim on 19/04/2024.
-//
 #include "column.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,7 +44,7 @@ int insert_value(COLUMN* col, int value){
 void delete_column(COLUMN **col) {
     if (col == NULL || *col == NULL) {
         printf("ERREUR\n");
-        return;
+        exit(EXIT_FAILURE);
     }
     // Libérer le tableau de données
     free((*col)->data);

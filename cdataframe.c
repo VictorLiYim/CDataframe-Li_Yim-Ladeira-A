@@ -1,6 +1,3 @@
-//
-// Created by Victor Li Yim on 19/04/2024.
-//
 #include "cdataframe.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -109,8 +106,7 @@ void print_CDataframe_limited_columns(CDataframe* cdataframe){
             printf("[%d] %d\n", j, cdataframe->columns[i]->data[j]);
         }
     }
-
-    }
+}
 
 void add_raw(CDataframe* cdataframe){
     for(int i = 0; i<cdataframe->num_columns; i++){
@@ -309,7 +305,7 @@ int research_cel_sup(CDataframe* cdataframe, int x){
     return count;
 }
 
-int research__celinf(CDataframe* cdataframe, int x){
+int research_cel_inf(CDataframe* cdataframe, int x){
     int count, verif;
     if(cdataframe == NULL){
         printf("ERREUR");

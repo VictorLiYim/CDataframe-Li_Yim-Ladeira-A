@@ -1,7 +1,3 @@
-//
-// Created by Victor Li Yim on 19/04/2024.
-//
-
 #ifndef CDATAFRAME_LI_YIM_LADEIRA_A_COLUMN_H
 #define CDATAFRAME_LI_YIM_LADEIRA_A_COLUMN_H
 
