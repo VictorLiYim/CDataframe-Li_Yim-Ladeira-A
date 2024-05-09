@@ -1,6 +1,3 @@
-//
-// Created by Victor Li Yim on 19/04/2024.
-//
 #include "cdataframe.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,7 +37,7 @@ void read_CDataframe(CDataframe* cdataframe) {
     }
 
     for (int i = 0; i < cdataframe->num_columns; i++) {
-        printf("Column %d:\n", i + 1);
+        printf("Colonne %d:\n", i + 1);
         int nb_value;
         printf("Entrez le nombre de valeurs de la colonnes %d: ", i + 1);
         scanf("%d", &nb_value);
@@ -109,8 +106,7 @@ void print_CDataframe_limited_columns(CDataframe* cdataframe){
             printf("[%d] %d\n", j, cdataframe->columns[i]->data[j]);
         }
     }
-
-    }
+}
 
 void add_raw(CDataframe* cdataframe){
     for(int i = 0; i<cdataframe->num_columns; i++){
@@ -280,46 +276,38 @@ void print_num_col(CDataframe* cdataframe){
 }
 
 int research_cel_equal(CDataframe* cdataframe, int x){
-    int count, verif;
+    int count = 0;
     if(cdataframe == NULL){
         printf("ERREUR");
         exit(EXIT_FAILURE);
     }
     for(int i = 0; i<cdataframe->num_columns; i++){
-        verif = research_equal(cdataframe->columns[i], x);
-        if(verif != 0){
-            count++;
-        }
+        count += research_equal(cdataframe->columns[i], x);
     }
     return count;
 }
 
 int research_cel_sup(CDataframe* cdataframe, int x){
-    int count, verif;
+    int count = 0;
     if(cdataframe == NULL){
         printf("ERREUR");
         exit(EXIT_FAILURE);
     }
     for(int i = 0; i<cdataframe->num_columns; i++){
-        verif = research_sup(cdataframe->columns[i], x);
-        if(verif != 0){
-            count++;
-        }
+        count += research_sup(cdataframe->columns[i], x);
+
     }
     return count;
 }
 
-int research__celinf(CDataframe* cdataframe, int x){
-    int count, verif;
+int research_cel_inf(CDataframe* cdataframe, int x){
+    int count = 0;
     if(cdataframe == NULL){
         printf("ERREUR");
         exit(EXIT_FAILURE);
     }
     for(int i = 0; i<cdataframe->num_columns; i++){
-        verif = research_inf(cdataframe->columns[i], x);
-        if(verif != 0){
-            count++;
-        }
+        count += research_inf(cdataframe->columns[i], x);
     }
     return count;
 }

@@ -1,7 +1,3 @@
-//
-// Created by Victor Li Yim on 19/04/2024.
-//
-
 #ifndef CDATAFRAME_LI_YIM_LADEIRA_A_CDATAFRAME_H
 #define CDATAFRAME_LI_YIM_LADEIRA_A_CDATAFRAME_H
 
@@ -38,6 +34,6 @@ void print_num_raw(CDataframe* cdataframe);
 void print_num_col(CDataframe* cdataframe);
 int research_cel_equal(CDataframe* cdataframe, int x);
 int research_cel_sup(CDataframe* cdataframe, int x);
-int research__celinf(CDataframe* cdataframe, int x);
+int research_cel_inf(CDataframe* cdataframe, int x);
 
 #endif //CDATAFRAME_LI_YIM_LADEIRA_A_CDATAFRAME_H
