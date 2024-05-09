@@ -19,7 +19,6 @@ void menu(){
                "4- Modifier\n"
                "5- Analyser (recherche de valeurs ou d'occurrences)\n"
                "6- Quitter\n");
-
         scanf("%d", &option);
             switch(option){
                 case 1:
