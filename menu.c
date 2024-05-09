@@ -77,6 +77,7 @@ void menu(){
                                "-1 une valeur spécifique\n"
                                "-2 le titre d'une colonne\n");
                         scanf("%d", &choix);
+
                     }while(choix < 1 && choix > 2);
                     if(choix == 1){
                         search(cdataframe);
