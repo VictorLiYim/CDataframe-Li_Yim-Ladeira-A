@@ -24,7 +24,7 @@ void delete_raw(CDataframe* cdataframe);
 void add_column(CDataframe* cdataframe);
 void delete_columncdf(CDataframe* cdataframe);
 void rename_title(CDataframe* cdataframe);
-int verify(CDataframe* cdataframe);
+int verify(CDataframe* cdataframe, int val);
 void search(CDataframe* cdataframe);
 void print_name(CDataframe* cdataframe);
 

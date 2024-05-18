@@ -55,9 +55,11 @@ void menu(){
                                "-1 Colonnes\n"
                                "-2 Lignes\n"
                                "-3 CDataframe complet\n"
-                               "-4 Noms des colonnes\n");
+                               "-4 Noms des colonnes\n"
+                               "-5 Le nombre de lignes\n"
+                               "-6 Le nombre de colonnes\n");
                         scanf("%d", &choix);
-                    }while(choix < 1 && choix > 4);
+                    }while(choix < 1 && choix > 6);
                     if(choix ==  1){
                         print_CDataframe_limited_columns(cdataframe);
                     }
@@ -69,6 +71,12 @@ void menu(){
                     }
                     else if(choix == 4){
                         print_name(cdataframe);
+                    }
+                    else if(choix == 5){
+                        print_num_raw(cdataframe);
+                    }
+                    else if(choix == 6){
+                        print_num_col(cdataframe);
                     }
                     break;
                 case 4:
@@ -88,14 +96,34 @@ void menu(){
                     break;
                 case 5:
                     do {
-                        int x;
-                        printf("Entrez la valeur que vous cherchez : ");
-                        scanf("%d", &x);
                         printf("\nQue Recherchez-vous : \n"
-                               "-1 Nombre d'occurrence \n"
-                               "-2 Ligne\n");
+                               "-1 Nombre de valeurs égale\n"
+                               "-2 Nombre de valeurs supérieures\n"
+                               "-3 Nombre de valeurs inférieures\n"
+                               "-4 Vérifier l'existence d'une valeur\n");
                         scanf("%d", &choix);
-                    }while(choix < 1 && choix > 2);
+                    }while(choix < 1 && choix > 4);
+                    int x;
+                    printf("Entrez la valeur que vous cherchez : ");
+                    scanf("%d", &x);
+                    if(choix == 1){
+                        research_cel_equal(cdataframe, x);
+                    }
+                    else if(choix == 2){
+                        research_cel_sup(cdataframe, x);
+                    }
+                    else if(choix ==  3){
+                        research_cel_inf(cdataframe, x);
+                    }
+                    else if(choix == 4){
+                        int verif = verify(cdataframe, x);
+                        if(verif){
+                            printf("La valeur %d que vous recherchez existe", x);
+                        }
+                        else{
+                            printf("%d n'existe pas", x);
+                        }
+                    }
                     break;
                 case 6:
                     printf("fin");
