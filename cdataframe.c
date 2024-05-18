@@ -217,10 +217,7 @@ void rename_title(CDataframe* cdataframe){
     }
 }
 
-int verify(CDataframe* cdataframe){
-    int val;
-    printf("Saisir la valeur que vous recherchez : ");
-    scanf("%d", &val);
+int verify(CDataframe* cdataframe, int val){
     for(int i = 0; i<cdataframe->num_columns; i++){
         for(int j = 0; j<cdataframe->columns[i]->TL; j++){
             if(cdataframe->columns[i]->data[j] == val){
