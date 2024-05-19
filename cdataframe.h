@@ -24,7 +24,7 @@ void delete_raw(CDataframe* cdataframe);
 void add_column(CDataframe* cdataframe);
 void delete_columncdf(CDataframe* cdataframe);
 void rename_title(CDataframe* cdataframe);
-int verify(CDataframe* cdataframe, int val);
+int search_value(CDataframe *dataframe, void *value, ENUM_TYPE type);
 void search(CDataframe* cdataframe);
 void print_name(CDataframe* cdataframe);
 
@@ -32,8 +32,8 @@ void print_name(CDataframe* cdataframe);
 
 void print_num_raw(CDataframe* cdataframe);
 void print_num_col(CDataframe* cdataframe);
-int research_cel_equal(CDataframe* cdataframe, int x);
-int research_cel_sup(CDataframe* cdataframe, int x);
-int research_cel_inf(CDataframe* cdataframe, int x);
+int research_cel_equal(CDataframe* df, void* value, ENUM_TYPE type);
+int research_cel_inf(CDataframe* df, void* value, ENUM_TYPE type);
+int research_cel_sup(CDataframe* df, void* value, ENUM_TYPE type);
 
 #endif //CDATAFRAME_LI_YIM_LADEIRA_A_CDATAFRAME_H

@@ -88,7 +88,8 @@ void menu(){
 
                     }while(choix < 1 && choix > 2);
                     if(choix == 1){
-                        search(cdataframe);
+
+                        search(cdataframe, value, type);
                     }
                     else if(choix == 2){
                         rename_title(cdataframe);

@@ -22,63 +22,76 @@ COLUMN *create_column(ENUM_TYPE type, char* title)
     return col;
 }
 
+
+
 int insert_value(COLUMN* col, void* value) {
     /*
- * Fonction qui permet d'ajouter une valeur donnée en paramètre à une colonne également donnée en paramètre
- */
+* Fonction qui permet d'ajouter une valeur donnée en paramètre à une colonne également donnée en paramètre
+*/
     if (col->TP == 0) {
-        int new_size = REALOC_SIZE;
-        COL_TYPE *new_data = (COL_TYPE *) malloc(new_size * sizeof(COL_TYPE));
-        if (new_data == NULL) {
+        col->TP = REALLOC_SIZE;
+        col->data = (COL_TYPE **) malloc(col->TP * sizeof(COL_TYPE *));
+        if (col->data == NULL) {
             return 0;
         }
-        col->data = new_data;
-        col->TP = new_size;
+        col->index = (unsigned long long int *) malloc(col->TP * sizeof(unsigned long long int));
+        if (col->index == NULL) {
+            free(col->data);
+            return 0;
+        }
     } else if (col->TL >= col->TP) {
-        int new_size = col->TP + 256;
-        COL_TYPE *new_data = (COL_TYPE *) realloc(col->data, new_size * sizeof(COL_TYPE)); // Réallocation
+        col->TP += REALLOC_SIZE;
+        COL_TYPE **new_data = (COL_TYPE **) realloc(col->data, col->TP * sizeof(COL_TYPE *));
         if (new_data == NULL) {
             return 0;
         }
         col->data = new_data;
-        col->TP = new_size;
+
+        unsigned long long int *new_index = (unsigned long long int *) realloc(col->index, col->TP * sizeof(unsigned long long int));
+        if (new_index == NULL) {
+            return 0;
+        }
+        col->index = new_index;
     }
 
-    COL_TYPE *new_data = (COL_TYPE *) malloc(sizeof(COL_TYPE));
-    if(value == NULL)
-    {
-        new_data->string_value = NULL;
+    col->data[col->TL] = (COL_TYPE *) malloc(sizeof(COL_TYPE));
+    if (col->data[col->TL] == NULL) {
+        return 0;
     }
-    else
-    {
-        switch (col->type)
-        {
-            case UINT:
-                new_data->uint_value = *(unsigned int *) value;
-                break;
-            case INT:
-                new_data->int_value = *(signed int *) value;
-                break;
-            case CHAR:
-                new_data->char_value = *(char *) value;
-                break;
-            case FLOAT:
-                new_data->float_value = *(float *) value;
-                break;
-            case DOUBLE:
-                new_data->double_value = *(double *) value;
-                break;
-            case STRING:
-                new_data->string_value = strdup((char *) value);
-                break;
-            case STRUCTURE:
-                new_data->struct_value = value;
-                break;
-            default:
+
+    switch (col->type) {
+        case UINT:
+            col->data[col->TL]->uint_value = *(unsigned int *) value;
+            break;
+        case INT:
+            col->data[col->TL]->int_value = *(signed int *) value;
+            break;
+        case CHAR:
+            col->data[col->TL]->char_value = *(char *) value;
+            break;
+        case FLOAT:
+            col->data[col->TL]->float_value = *(float *) value;
+            break;
+        case DOUBLE:
+            col->data[col->TL]->double_value = *(double *) value;
+            break;
+        case STRING:
+            col->data[col->TL]->string_value = (char *) malloc((strlen((char *) value) + 1) * sizeof(char));
+            if (col->data[col->TL]->string_value == NULL) {
+                free(col->data[col->TL]);
                 return 0;
-        }
+            }
+            strcpy(col->data[col->TL]->string_value, (char *) value);
+            break;
+        case STRUCTURE:
+            col->data[col->TL]->struct_value = value;
+            break;
+        default:
+            free(col->data[col->TL]);
+            return 0;
     }
-    col->data[col->TL] = value;
+
+    col->index[col->TL] = col->TL;
     col->TL++;
     return 1;
 }
@@ -106,7 +119,7 @@ void delete_column(COLUMN **col) {
 
 void convert_value(COLUMN* col, unsigned long long int i, char* str, int size) {
     /*
-     * Fonction convertit une valuer de n'importe quel type en string
+     * Fonction converti une valeur de n'importe quel type en string
      */
     switch (col->type) {
         case INT:
@@ -143,4 +156,200 @@ void print_col(COLUMN* col) {
         convert_value(col, i, str, sizeof(str));
         printf("[%u] %s\n", i, str);
     }
+}
+
+int nb_occurrences(COLUMN *col, void *value) {
+    if (col == NULL || value == NULL) {
+        printf("ERREUR\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int count = 0;
+    for (unsigned int i = 0; i < col->TL; i++) {
+        switch (col->type) {
+            case UINT:
+                if (*(unsigned int*)col->data[i] == *(unsigned int *)value) {
+                    count++;
+                }
+                break;
+            case INT:
+                if (*(int*)col->data[i]== *(int *)value) {
+                    count++;
+                }
+                break;
+            case CHAR:
+                if (*(char*)col->data[i] == *(char *)value) {
+                    count++;
+                }
+                break;
+            case FLOAT:
+                if (*(float*)col->data[i] == *(float *)value) {
+                    count++;
+                }
+                break;
+            case DOUBLE:
+                if (*(double*)col->data[i] == *(double *)value) {
+                    count++;
+                }
+                break;
+            case STRING:
+                if (strcmp(col->data[i]->string_value, (char *)value) == 0) {
+                    count++;
+                }
+                break;
+            default:
+                printf("Type de colonne invalide.\n");
+                return 0;
+        }
+    }
+
+    return count;
+}
+
+COL_TYPE* search_val(COLUMN* col, int x) {
+    if (x < col->TL) {
+        return col->data[x];
+    } else {
+        return 0;
+    }
+}
+
+int research_sup(COLUMN *col, void *value) {
+    if (col == NULL || value == NULL) {
+        printf("ERREUR\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int count = 0;
+    for (unsigned int i = 0; i < col->TL; i++) {
+        switch (col->type) {
+            case UINT:
+                if (*(unsigned int*)col->data[i] > *(unsigned int *)value) {
+                    count++;
+                }
+                break;
+            case INT:
+                if (*(int*)col->data[i] > *(int *)value) {
+                    count++;
+                }
+                break;
+            case CHAR:
+                if (*(char*)col->data[i] > *(char *)value) {
+                    count++;
+                }
+                break;
+            case FLOAT:
+                if (*(float*)col->data[i] > *(float *)value) {
+                    count++;
+                }
+                break;
+            case DOUBLE:
+                if (*(double*)col->data[i] > *(double *)value) {
+                    count++;
+                }
+                break;
+            case STRING:
+                if (strcmp(col->data[i]->string_value, (char *)value) > 0) {
+                    count++;
+                }
+                break;
+            default:
+                printf("Type invalide\n");
+                return 0;
+        }
+    }
+    return count;
+}
+
+int research_equal(COLUMN *col, void *value) {
+    if (col == NULL || value == NULL) {
+        printf("ERREUR\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int count = 0;
+    for (unsigned int i = 0; i < col->TL; i++) {
+        switch (col->type) {
+            case UINT:
+                if (*(unsigned int*)col->data[i] == *(unsigned int *)value) {
+                    count++;
+                }
+                break;
+            case INT:
+                if (*(int*)col->data[i] == *(int *)value) {
+                    count++;
+                }
+                break;
+            case CHAR:
+                if (*(char*)col->data[i] == *(char *)value) {
+                    count++;
+                }
+                break;
+            case FLOAT:
+                if (*(float*)col->data[i] == *(float *)value) {
+                    count++;
+                }
+                break;
+            case DOUBLE:
+                if (*(double*)col->data[i] == *(double *)value) {
+                    count++;
+                }
+                break;
+            case STRING:
+                if (strcmp(col->data[i]->string_value, (char *)value) == 0) {
+                    count++;
+                }
+                break;
+            default:
+                printf("Type invalide\n");
+                return 0;
+        }
+    }
+    return count;
+}
+int research_inf(COLUMN *col, void *value) {
+    if (col == NULL || value == NULL) {
+        printf("ERREUR\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int count = 0;
+    for (unsigned int i = 0; i < col->TL; i++) {
+        switch (col->type) {
+            case UINT:
+                if (*(unsigned int*)col->data[i] < *(unsigned int *)value) {
+                    count++;
+                }
+                break;
+            case INT:
+                if (*(int*)col->data[i] < *(int *)value) {
+                    count++;
+                }
+                break;
+            case CHAR:
+                if (*(char*)col->data[i] < *(char *)value) {
+                    count++;
+                }
+                break;
+            case FLOAT:
+                if (*(float*)col->data[i] < *(float *)value) {
+                    count++;
+                }
+                break;
+            case DOUBLE:
+                if (*(double*)col->data[i] < *(double *)value) {
+                    count++;
+                }
+                break;
+            case STRING:
+                if (strcmp(col->data[i]->string_value, (char *)value) < 0) {
+                    count++;
+                }
+                break;
+            default:
+                printf("Type invalide\n");
+                return 0;
+        }
+    }
+    return count;
 }

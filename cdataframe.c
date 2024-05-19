@@ -405,39 +405,175 @@ void rename_title(CDataframe* cdataframe){
     }
 }
 
-int verify(CDataframe* cdataframe, int val){
-    for(int i = 0; i<cdataframe->num_columns; i++){
-        for(int j = 0; j<cdataframe->columns[i]->TL; j++){
-            if(cdataframe->columns[i]->data[j] == val){
-                return 1;
+int search_value(CDataframe *dataframe, void *value, ENUM_TYPE type) {
+    if (dataframe == NULL || value == NULL) {
+        printf("ERREUR : Paramètre non valide.\n");
+        return 0;
+    }
+
+    for (int i = 0; i < dataframe->num_columns; i++) {
+        COLUMN *col = dataframe->columns[i];
+        if (col->type != type) {
+            continue; // On passe les colonnes qui ont un type différent de ce que l'on recherche
+        }
+
+        for (unsigned int j = 0; j < col->TL; j++) {
+            switch (type) {
+                case UINT:
+                    if (col->data[j]->uint_value == *(unsigned int *)value) {
+                        return 1;
+                    }
+                    break;
+                case INT:
+                    if (col->data[j]->int_value == *(int *)value) {
+                        return 1;
+                    }
+                    break;
+                case CHAR:
+                    if (col->data[j]->char_value == *(char *)value) {
+                        return 1;
+                    }
+                    break;
+                case FLOAT:
+                    if (col->data[j]->float_value == *(float *)value) {
+                        return 1;
+                    }
+                    break;
+                case DOUBLE:
+                    if (col->data[j]->double_value == *(double *)value) {
+                        return 1;
+                    }
+                    break;
+                case STRING:
+                    if (strcmp(col->data[j]->string_value, (char *)value) == 0) {
+                        return 1;
+                    }
+                    break;
+                case STRUCTURE:
+                    // Comparaison des structures - dépend de la structure spécifique
+                    if (col->data[j]->struct_value == value) {
+                        return 1;
+                    }
+                    break;
+                default:
+                    printf("Type de colonne non pris en charge.\n");
+                    return 0;
             }
         }
     }
     return 0;
 }
 
-/*
-void search(CDataframe* cdataframe){
+void search(CDataframe* cdataframe) {
+    if (cdataframe == NULL) {
+        printf("ERREUR");
+        exit(EXIT_FAILURE);
+    }
+
     int option;
     do {
-        printf("Que voulez-vous faire entre : \n -0 acceder\n -1 modifier \n");
+        printf("Que voulez-vous faire ? \n"
+               "-0 accéder\n "
+               "-1 modifier \n");
         scanf("%d", &option);
-    }while(option < 0 || option > 1);
+    } while (option < 0 || option > 1);
+
     int num_raw, num_col;
-    printf("Entrez l'indice de la colonne et de la ligne : ");
-    scanf("%d %d", &num_col, &num_raw);
+    printf("Entrez l'indice de la colonne et de la ligne sous la forme [colonne ligne]: ");
+    scanf("[%d %d]", &num_col, &num_raw);
     printf("\n");
-    if(option == 0){
-        printf("La valeur que vous cherchez à la colonne %d ligne %d est %d\n", num_col, num_raw, cdataframe->columns[num_col]->data[num_raw]);
+
+    if (num_col >= cdataframe->num_columns || num_raw >= cdataframe->columns[num_col]->TL) {
+        printf("ERREUR : Indice de colonne ou de ligne non valide.\n");
+        return;
     }
-    else{
-        int new_val;
-        printf("Saisissez la nouvelle valeur : ");
-        scanf("%d", &new_val);
-        cdataframe->columns[num_col]->data[num_raw]= new_val;
-        printf("Modification effectuée");
+
+    COLUMN *col = cdataframe->columns[num_col];
+
+    if (option == 0) { // Accéder à la valeur
+        switch (col->type) {
+            case UINT:
+                printf("La valeur que vous cherchez à la colonne %d ligne %d est %u\n", num_col, num_raw,
+                       *(unsigned int *) col->data[num_raw]);
+                break;
+            case INT:
+                printf("La valeur que vous cherchez à la colonne %d ligne %d est %d\n", num_col, num_raw,
+                       *(int *) col->data[num_raw]);
+                break;
+            case CHAR:
+                printf("La valeur que vous cherchez à la colonne %d ligne %d est %c\n", num_col, num_raw,
+                       *(char *) col->data[num_raw]);
+                break;
+            case FLOAT:
+                printf("La valeur que vous cherchez à la colonne %d ligne %d est %f\n", num_col, num_raw,
+                       *(float *) col->data[num_raw]);
+                break;
+            case DOUBLE:
+                printf("La valeur que vous cherchez à la colonne %d ligne %d est %lf\n", num_col, num_raw,
+                       *(double *) col->data[num_raw]);
+                break;
+            case STRING:
+                printf("La valeur que vous cherchez à la colonne %d ligne %d est %s\n", num_col, num_raw,
+                       col->data[num_raw]->string_value);
+                break;
+            default:
+                printf("Type invalide\n");
+                break;
+        }
+    } else { // Modifier la valeur
+        void *new_val;
+        switch (col->type) {
+            case UINT: {
+                unsigned int uint_val;
+                printf("Saisissez la nouvelle valeur (unsigned int) : ");
+                scanf("%u", &uint_val);
+                *(unsigned int *) col->data[num_raw] = uint_val;
+                break;
+            }
+            case INT: {
+                int int_val;
+                printf("Saisissez la nouvelle valeur (int) : ");
+                scanf("%d", &int_val);
+                *(int *) col->data[num_raw] = int_val;
+                break;
+            }
+            case CHAR: {
+                char char_val;
+                printf("Saisissez la nouvelle valeur (char) : ");
+                scanf(" %c", &char_val);
+                *(char *) col->data[num_raw] = char_val;
+                break;
+            }
+            case FLOAT: {
+                float float_val;
+                printf("Saisissez la nouvelle valeur (float) : ");
+                scanf("%f", &float_val);
+                *(float *) col->data[num_raw] = float_val;
+                break;
+            }
+            case DOUBLE: {
+                double double_val;
+                printf("Saisissez la nouvelle valeur (double) : ");
+                scanf("%lf", &double_val);
+                *(double *) col->data[num_raw] = double_val;
+                break;
+            }
+            case STRING: {
+                char str_val[256];
+                printf("Saisissez la nouvelle valeur (string) : ");
+                scanf("%s", str_val);
+                free(col->data[num_raw]->string_value); // On libère l'espace alloué par l'ancienne valeur
+                col->data[num_raw]->string_value = strdup(str_val); // Changement
+                break;
+            }
+            default:
+                printf("Type invalide\n");
+                return;
+        }
+        printf("Modification effectuée.\n");
     }
 }
+
 void print_name(CDataframe* cdataframe){
     for(int i = 0; i<cdataframe->num_columns; i++){
         printf("Titre de la colonne %d : %s\n", i+1,cdataframe->columns[i]->name);
@@ -450,7 +586,7 @@ void print_num_raw(CDataframe* cdataframe){
         exit(EXIT_FAILURE);
     }
     for(int i = 0; i<cdataframe->num_columns; i++){
-        printf("Nombre de ligne de la colonne %s : %d", cdataframe->columns[i]->name, cdataframe->columns[i]->TL);
+        printf("Nombre de ligne de la colonne %s : %d\n", cdataframe->columns[i]->name, cdataframe->columns[i]->TL);
     }
 }
 
@@ -462,39 +598,29 @@ void print_num_col(CDataframe* cdataframe){
     printf("Il y a %d colonnes.", cdataframe->num_columns);
 }
 
-int research_cel_equal(CDataframe* cdataframe, int x){
+int research_cel_equal(CDataframe* df, void* value, ENUM_TYPE type) {
     int count = 0;
-    if(cdataframe == NULL){
-        printf("ERREUR");
-        exit(EXIT_FAILURE);
-    }
-    for(int i = 0; i<cdataframe->num_columns; i++){
-        count += research_equal(cdataframe->columns[i], x);
+    for (int col_idx = 0; col_idx < df->num_columns; col_idx++) {
+        COLUMN* col = df->columns[col_idx];
+        count += research_equal(col, value);
     }
     return count;
 }
 
-int research_cel_sup(CDataframe* cdataframe, int x){
+int research_cel_sup(CDataframe* df, void* value, ENUM_TYPE type) {
     int count = 0;
-    if(cdataframe == NULL){
-        printf("ERREUR");
-        exit(EXIT_FAILURE);
-    }
-    for(int i = 0; i<cdataframe->num_columns; i++){
-        count += research_sup(cdataframe->columns[i], x);
-
+    for (int col_idx = 0; col_idx < df->num_columns; col_idx++) {
+        COLUMN* col = df->columns[col_idx];
+        count += research_sup(col, value);
     }
     return count;
 }
 
-int research_cel_inf(CDataframe* cdataframe, int x){
+int research_cel_inf(CDataframe* df, void* value, ENUM_TYPE type) {
     int count = 0;
-    if(cdataframe == NULL){
-        printf("ERREUR");
-        exit(EXIT_FAILURE);
-    }
-    for(int i = 0; i<cdataframe->num_columns; i++){
-        count += research_inf(cdataframe->columns[i], x);
+    for (int col_idx = 0; col_idx < df->num_columns; col_idx++) {
+        COLUMN* col = df->columns[col_idx];
+        count += research_inf(col, value);
     }
     return count;
-}*/
+}

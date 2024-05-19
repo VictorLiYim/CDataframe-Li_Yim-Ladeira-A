@@ -36,10 +36,10 @@ void convert_value(COLUMN *col, unsigned long long int i, char *str, int size);
 void print_col(COLUMN* col);
 
 //fonctionnalités
-int nb_occurrences(COLUMN* col, int x);
-int search_val(COLUMN* col, int x);
-int research_sup(COLUMN* col, int x);
-int research_inf(COLUMN* col, int x);
-int research_equal(COLUMN* col, int x);
+int nb_occurrences(COLUMN* col, void* x);
+COL_TYPE* search_val(COLUMN* col, int x);
+int research_sup(COLUMN* col, void* x);
+int research_inf(COLUMN* col, void* x);
+int research_equal(COLUMN* col, void* x);
 
 #endif //CDATAFRAME_LI_YIM_LADEIRA_A_COLUMN_H
