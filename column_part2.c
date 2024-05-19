@@ -3,10 +3,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 COLUMN *create_column(ENUM_TYPE type, char* title)
 {
+    /*
+     * Fonction qui crée une colonne de type donné en paramètre
+     */
+    
     COLUMN *col = (COLUMN*) malloc(sizeof(COLUMN)); // Allouer de la mémoire pour la colonne
-    if (col == NULL) {
+    if (col == NULL) 
+    {
         printf("Erreur lors de l'allocation mémoire\n");
         exit(EXIT_FAILURE);
     }
@@ -19,20 +25,29 @@ COLUMN *create_column(ENUM_TYPE type, char* title)
     return col;
 }
 
-// Fonction pour ajouter une valeur à la colonne
-int insert_value(COLUMN* col, void* value) {
-    if (col->TP == 0) {
+
+int insert_value(COLUMN* col, void* value) 
+{
+    /*
+     * Fonction qui permet d'ajouter une valeur donnée en paramètre à une colonne également donnée en paramètre
+     */
+    
+    if (col->TP == 0) 
+    {
         int new_size = REALOC_SIZE;
         COL_TYPE *new_data = (COL_TYPE *) malloc(new_size * sizeof(COL_TYPE));
-        if (new_data == NULL) {
+        if (new_data == NULL) 
+        {
             return 0;
         }
         col->data = new_data;
         col->TP = new_size;
-    } else if (col->TL >= col->TP) {
+    } else if (col->TL >= col->TP) 
+    {
         int new_size = col->TP + 256;
         COL_TYPE *new_data = (COL_TYPE *) realloc(col->data, new_size * sizeof(COL_TYPE)); // Réallocation
-        if (new_data == NULL) {
+        if (new_data == NULL) 
+        {
             return 0;
         }
         col->data = new_data;
@@ -78,8 +93,14 @@ int insert_value(COLUMN* col, void* value) {
     return 1;
 }
 
-void delete_column(COLUMN **col) {
-    if (col == NULL || *col == NULL) {
+void delete_column(COLUMN **col) 
+{
+    /*
+     * Fonction qui supprime une colonne donnée en paramètre
+     */
+    
+    if (col == NULL || *col == NULL) 
+    {
         printf("ERREUR\n");
         exit(EXIT_FAILURE);
     }
@@ -92,9 +113,12 @@ void delete_column(COLUMN **col) {
 
 void convert_value(COLUMN* col, unsigned long long int i, char* str, int size)
 {
-
-    switch(col->type){
-
+    /*
+     * Fonction convertit une valuer de n'importe quel type en string
+     */
+    
+    switch(col->type)
+    {
         case INT:
             snprintf(str, size, "%d", *((int*)col->data[i]));
             col->data[i] = str;
@@ -124,18 +148,25 @@ void convert_value(COLUMN* col, unsigned long long int i, char* str, int size)
     }
 }
 
-void print_col(COLUMN* col){
+void print_col(COLUMN* col)
+{
+    /*
+     * Fonction qui affiche tout le contenu d'une colonne donnée en paramètre
+     */
+    
     int i, j;
     for(j = 0; j<col->TL; j++)
     {
         char *str = (char *) malloc(50 * sizeof(char));
-        if(col->data[j] != NULL) {
+        if(col->data[j] != NULL) 
+        {
             convert_value(col, j, str, 50);
         }
     }
 
     printf("[NAME] %s\n", col->name);
-    for(i = 0; i<col->TL; i++){
+    for(i = 0; i<col->TL; i++)
+    {
         if(col->data[i] == NULL)
         {
             printf("[%d] NULL\n", i);
