@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cdataframe.h"
-
+/*
 void menu(){
     int continuer = 1, option, num_columns, choix;
     while(continuer){
@@ -12,14 +12,14 @@ void menu(){
         printf("Remplissage des colonnes : \n");
         read_CDataframe(cdataframe);
         while(option != 6){
-        printf("Saisissez l'opération que vous souhaitez faire : \n"
-               "1- Ajouter (colonnes / lignes)\n"
-               "2- Supprimer (colonnes / lignes)\n"
-               "3- Afficher\n"
-               "4- Modifier\n"
-               "5- Analyser (recherche de valeurs ou d'occurrences)\n"
-               "6- Quitter\n");
-        scanf("%d", &option);
+            printf("Saisissez l'opération que vous souhaitez faire : \n"
+                   "1- Ajouter (colonnes / lignes)\n"
+                   "2- Supprimer (colonnes / lignes)\n"
+                   "3- Afficher\n"
+                   "4- Modifier\n"
+                   "5- Analyser (recherche de valeurs ou d'occurrences)\n"
+                   "6- Quitter\n");
+            scanf("%d", &option);
             switch(option){
                 case 1:
                     do {
@@ -141,4 +141,4 @@ void menu(){
         free(cdataframe->columns);
         free(cdataframe);
     }
-}
+}*/

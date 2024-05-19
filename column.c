@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-COLUMN *create_column(char* title)
+
+COLUMN *create_column(ENUM_TYPE type, char* title)
 {
     COLUMN *col = (COLUMN*) malloc(sizeof(COLUMN)); // Allouer de la mémoire pour la colonne
     if (col == NULL) {
@@ -11,30 +12,66 @@ COLUMN *create_column(char* title)
     }
     col->TP = 0;
     col->TL = 0;
+    col->type = type;
     col->name = strdup(title);
     col->data = NULL;
+    col->index = NULL;
     return col;
 }
 
-// Fonction pour ajouter un entier à la colonne
-int insert_value(COLUMN* col, int value){
+// Fonction pour ajouter une valeur à la colonne
+int insert_value(COLUMN* col, void* value) {
     if (col->TP == 0) {
         int new_size = REALOC_SIZE;
-        int *new_data = (int *) malloc(new_size * sizeof(int));
+        COL_TYPE *new_data = (COL_TYPE *) malloc(new_size * sizeof(COL_TYPE));
+        if (new_data == NULL) {
+            return 0;
+        }
+        col->data = new_data;
+        col->TP = new_size;
+    } else if (col->TL >= col->TP) {
+        int new_size = col->TP + 256;
+        COL_TYPE *new_data = (COL_TYPE *) realloc(col->data, new_size * sizeof(COL_TYPE)); // Réallocation
         if (new_data == NULL) {
             return 0;
         }
         col->data = new_data;
         col->TP = new_size;
     }
-    else if (col->TL >= col->TP) {
-        int new_size = col->TP + 256;
-        int* new_data = (int *) realloc(col->data, new_size * sizeof(int)); // Réallocation
-        if (new_data == NULL) {
-            return 0;
+
+    COL_TYPE *new_data = (COL_TYPE *) malloc(sizeof(COL_TYPE));
+    if(value == NULL)
+    {
+        new_data->string_value = NULL;
+    }
+    else
+    {
+        switch (col->type)
+        {
+            case UINT:
+                new_data->uint_value = *(unsigned int *) value;
+                break;
+            case INT:
+                new_data->int_value = *(signed int *) value;
+                break;
+            case CHAR:
+                new_data->char_value = *(char *) value;
+                break;
+            case FLOAT:
+                new_data->float_value = *(float *) value;
+                break;
+            case DOUBLE:
+                new_data->double_value = *(double *) value;
+                break;
+            case STRING:
+                new_data->string_value = strdup((char *) value);
+                break;
+            case STRUCTURE:
+                new_data->struct_value = value;
+                break;
+            default:
+                return 0;
         }
-        col->data = new_data;
-        col->TP = new_size;
     }
     col->data[col->TL] = value;
     col->TL++;
@@ -46,57 +83,50 @@ void delete_column(COLUMN **col) {
         printf("ERREUR\n");
         exit(EXIT_FAILURE);
     }
-    // Libérer le tableau de données
-    free((*col)->data);
-    // Libérer la structure de colonne
+    for (unsigned int i = 0; i < (*col)->TL; i++) {
+        if ((*col)->type == STRING) {
+            free((*col)->data[i]->string_value);
+        }
+        free((*col)->data[i]);
+    }
+    free((*col)->data);    // Libérer le tableau de données
+    free((*col)->index);
+    free((*col)->name);
     free(*col);
     *col = NULL;
 }
 
-void print_col(COLUMN* col){
-    int i;
-    for(i = 0; i<col->TL; i++){
-        printf("[%d] %d\n", i, col->data[i]);
+void convert_value(COLUMN* col, unsigned long long int i, char* str, int size) {
+    switch (col->type) {
+        case INT:
+            snprintf(str, size, "%d", *(int*)col->data[i]);
+            break;
+        case FLOAT:
+            snprintf(str, size, "%f", *(float*)col->data[i]);
+            break;
+        case UINT:
+            snprintf(str, size, "%u", *(unsigned int*)col->data[i]);
+            break;
+        case CHAR:
+            snprintf(str, size, "%c", *(char*)col->data[i]);
+            break;
+        case DOUBLE:
+            snprintf(str, size, "%lf", *(double*)col->data[i]);
+            break;
+        case STRING:
+            snprintf(str, size, "%s", col->data[i]->string_value);
+            break;
+        default:
+            snprintf(str, size, "Format inconnu");
+            break;
     }
 }
 
-int nb_occurrences(COLUMN* col, int x){ //Retourner le nombre de d’occurrences d’une valeur x (x donné en paramètre).
-    int i, count = 0;
-    for(i=0; i<col->TL; i++){
-        if(col->data[i]==x){
-            count++;
-        }
+void print_col(COLUMN* col) {
+    printf("[NAME] %s\n", col->name);
+    for (unsigned int i = 0; i < col->TL; i++) {
+        char str[256];
+        convert_value(col, i, str, sizeof(str));
+        printf("[%u] %s\n", i, str);
     }
-    return count;
-}
-int search_val(COLUMN* col, int x){ //Retourner la valeur présente à la position x (x donné en paramètre).
-    return col->data[x];
-}
-
-int research_sup(COLUMN* col, int x){ // Retourner le nombre de valeurs qui sont supérieures à x (x donné en paramètre).
-    int i, count = 0;
-    for(i=0; i<col->TL; i++){
-        if(col->data[i]>x){
-            count++;
-        }
-    }
-    return count;
-}
-int research_inf(COLUMN* col, int x){ //Retourner le nombre de valeurs qui sont inférieures à x (x donné en paramètre).
-    int i, count = 0;
-    for(i=0; i<col->TL; i++){
-        if(col->data[i]<x){
-            count++;
-        }
-    }
-    return count;
-}
-int research_equal(COLUMN* col, int x){ //Retourner le nombre de valeurs qui sont égales à x (x donné en paramètre).
-    int i, count = 0;
-    for(i=0; i<col->TL; i++){
-        if(col->data[i]==x){
-            count++;
-        }
-    }
-    return count;
 }
