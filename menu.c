@@ -1,4 +1,7 @@
 #include "menu.h"
+/*
+ * Ce fichier menu va permettre d'utiliser toutes les fonctions créée le cdataframe ou dans colonne
+ */
 
 void menu(){
     int continuer = 1, option, num_columns, choix;

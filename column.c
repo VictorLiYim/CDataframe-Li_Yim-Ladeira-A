@@ -3,10 +3,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-COLUMN *create_column(ENUM_TYPE type, char* title)
-{
+/*
+ * Ce fichier est la base principale du projet, c'est ici que l'on va créer des colonnes et les modifier.
+ */
+
+COLUMN *create_column(ENUM_TYPE type, char* title){
     /*
-    * Fonction qui crée une colonne de type donné en paramètre
+    * Fonction qui crée une colonne de type donné en paramètre tout en y indiquant son nom
     */
     COLUMN *col = (COLUMN*) malloc(sizeof(COLUMN)); // Allouer de la mémoire pour la colonne
     if (col == NULL) {
@@ -28,8 +31,8 @@ COLUMN *create_column(ENUM_TYPE type, char* title)
 
 int insert_value(COLUMN* col, void* value) {
     /*
-* Fonction qui permet d'ajouter une valeur donnée en paramètre à une colonne également donnée en paramètre
-*/
+    * Fonction qui permet d'ajouter une valeur donnée en paramètre à une colonne également donnée en paramètre
+    */
     if (col->TP == 0) {
         col->TP = REALLOC_SIZE;
         col->data = (COL_TYPE **) malloc(col->TP * sizeof(COL_TYPE *));
@@ -217,6 +220,9 @@ COL_TYPE* search_val(COLUMN* col, int x) {
 }
 
 int research_sup(COLUMN *col, void *value) {
+    /*
+     * Fonction qui va compter le nombre de valeurs supérieure à celle donnée en paramètre au sein d'une colonne donnée
+     */
     if (col == NULL || value == NULL) {
         printf("ERREUR\n");
         exit(EXIT_FAILURE);
@@ -264,6 +270,9 @@ int research_sup(COLUMN *col, void *value) {
 }
 
 int research_equal(COLUMN *col, void *value) {
+    /*
+     * Fonction qui va compter le nombre de valeurs égale à celle donnée en paramètre au sein d'une colonne donnée
+     */
     if (col == NULL || value == NULL) {
         printf("ERREUR\n");
         exit(EXIT_FAILURE);
@@ -310,6 +319,9 @@ int research_equal(COLUMN *col, void *value) {
     return count;
 }
 int research_inf(COLUMN *col, void *value) {
+    /*
+     * Fonction qui va compter le nombre de valeurs inférieure à celle donnée en paramètre au sein d'une colonne donnée
+     */
     if (col == NULL || value == NULL) {
         printf("ERREUR\n");
         exit(EXIT_FAILURE);
@@ -356,8 +368,13 @@ int research_inf(COLUMN *col, void *value) {
     return count;
 }
 
-// Fonction de tri par insertion
+
 void insertion_sort(COLUMN* col, int left, int right, int sort_dir) {
+    /*
+     * Fonction qui va trier une colonne donnée en paramètre
+     * Il prends en paramètre l'indice le plus à gauche et à droite pour effectuer un tri et prend le type de tri
+     * si il est ascendant ou descendant
+     */
     for (int i = left + 1; i <= right; i++) {
         unsigned long long int index = col->index[i];
         void* key = col->data[index];
@@ -394,8 +411,11 @@ void insertion_sort(COLUMN* col, int left, int right, int sort_dir) {
     }
 }
 
-// Fonction de tri rapide
 void quicksort(COLUMN* col, int left, int right, int sort_dir) {
+    /*
+     * Fonction de tri rapide sur une colonne donnée en paramètre
+     * Il faut également indiquer l'indice de gauche, de droite et son type de tri ascendant ou descendant
+     */
     if (left < right) {
         unsigned long long int pivotIndex = partition(col, left, right, sort_dir);
         quicksort(col, left, pivotIndex - 1, sort_dir);
@@ -404,6 +424,10 @@ void quicksort(COLUMN* col, int left, int right, int sort_dir) {
 }
 
 int partition(COLUMN* col, int left, int right, int sort_dir) {
+    /*
+     * Fonction de partitionnage nécessaire pour le tri rapide comme montré dans l'algo donnée dans l'énoncé
+     * Il faut également indiquer l'indice de gauche, de droite et son type de tri ascendant ou descendant
+     */
     unsigned long long int pivotIndex = col->index[right];
     void* pivotValue = col->data[pivotIndex];
     int i = left - 1;
@@ -524,6 +548,10 @@ int partition(COLUMN* col, int left, int right, int sort_dir) {
 
 
 void sort(COLUMN* col, int sort_dir) {
+    /*
+     * Fonction qui prend une colonne en paramètre et l'a tri selon le type de tri indiqué en paramètre
+     * Choisi selon la colonne quel type de tri si par insertion ou tri rapide est nécessaire
+     */
     if (col == NULL || col->index == NULL) {
         printf("La colonne ou l'index est vide.\n");
         return;
@@ -540,6 +568,9 @@ void sort(COLUMN* col, int sort_dir) {
 }
 
 void print_col_by_index(COLUMN *col) {
+    /*
+     * Fonction qui permet d'afficher une colonne par son index
+     */
     if (col == NULL) {
         printf("Column is NULL\n");
         return;
