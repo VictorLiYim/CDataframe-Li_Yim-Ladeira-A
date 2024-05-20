@@ -9,4 +9,6 @@ add_executable(CDataframe_Li_Yim_Ladeira_A
         cdataframe.c
         column.h
         column.c
+        menu.c
+        menu.h
 )
