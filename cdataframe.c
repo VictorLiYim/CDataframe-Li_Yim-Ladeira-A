@@ -2,8 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+/*
+ * Ce fichier permet de gérer et de regrouper plusieurs colonnes dans une liste
+ */
 CDataframe* create_CDataframe(int num_columns) {
+    /*
+     * Fonction qui crée la liste qui va contenir un nombre n donnée en paramètre de colonnes
+     */
     CDataframe* cdataframe = malloc(sizeof(CDataframe));
     if (cdataframe == NULL) {
         printf("ERREUR\n");
@@ -61,6 +66,9 @@ CDataframe* create_CDataframe(int num_columns) {
 
 
 void read_CDataframe(CDataframe* cdataframe) {
+    /*
+     * Fonction qui permet de remplir un cdataframe donné en paramètre
+     */
     if (cdataframe == NULL) {
         printf("ERREUR\n");
         return;
@@ -121,6 +129,9 @@ void read_CDataframe(CDataframe* cdataframe) {
 }
 
 void read_cdataframe_hardway(CDataframe* dataframe) {
+    /*
+     * Fonction qui permet de remplir en dur un cdataframe donné en paramètre
+     */
     if (dataframe == NULL) {
         printf("ERREUR\n");
         exit(EXIT_FAILURE);
@@ -136,6 +147,9 @@ void read_cdataframe_hardway(CDataframe* dataframe) {
 }
 
 void print_CDataframe(CDataframe* cdataframe) {
+    /*
+     * Fonction qui permet d'afficher l'entièreté d'un cdataframe donné en paramètre
+     */
     if (cdataframe == NULL) {
         printf("ERREUR\n");
         exit(EXIT_FAILURE);
@@ -148,6 +162,9 @@ void print_CDataframe(CDataframe* cdataframe) {
 }
 
 void print_CDataframe_limited_raw(CDataframe* cdataframe){
+    /*
+     * Fonction qui permet d'afficher un certain nombre de lignes d'un cdataframe donné en paramètre
+     */
     int i,j, limit;
     printf("Combien de lignes voulez vous afficher : ");
     scanf("%d", &limit);
@@ -166,6 +183,9 @@ void print_CDataframe_limited_raw(CDataframe* cdataframe){
 
 
 void print_CDataframe_limited_columns(CDataframe* cdataframe){
+    /*
+     * Fonction qui permet d'afficher un certain nombre de colonnes d'un cdataframe donné en paramètre
+     */
     int i,j, limit;
     do {
         printf("Combien de colonnes souhaitez-vous afficher : ");
@@ -183,6 +203,9 @@ void print_CDataframe_limited_columns(CDataframe* cdataframe){
 }
 
 void add_raw(CDataframe* cdataframe) {
+    /*
+     * Fonction qui permet d'ajouter une ligne de donnée au cdataframe donné en paramètre
+     */
     for (int i = 0; i < cdataframe->num_columns; i++) {
         switch (cdataframe->columns[i]->type) {
             case UINT: {
@@ -232,6 +255,9 @@ void add_raw(CDataframe* cdataframe) {
 }
 
 void delete_raw(CDataframe* cdataframe) {
+    /*
+     * Fonction qui permet de supprimer une ligne de données d'un cdataframe donné en paramètre
+     */
     int index;
     do {
         printf("Entrez l'indice de la ligne à supprimer : ");
@@ -251,6 +277,9 @@ void delete_raw(CDataframe* cdataframe) {
 
 
 void add_column(CDataframe* cdataframe) {
+    /*
+     * Fonction qui permet d'ajouter une colonne à un cdataframe donné en paramètre
+     */
     if (cdataframe == NULL) {
         printf("ERREUR: CDataframe NULL\n");
         exit(EXIT_FAILURE);
@@ -359,6 +388,9 @@ void add_column(CDataframe* cdataframe) {
 }
 
 void delete_columncdf(CDataframe* cdataframe) {
+    /*
+     * Fonction qui permet de supprimer une colonnes d'un cdataframe donné en paramètre
+     */
     int index;
     do {
         printf("Entrez l'indice de la colonne à supprimer : ");
@@ -386,7 +418,7 @@ void delete_columncdf(CDataframe* cdataframe) {
 
 void rename_title(CDataframe* cdataframe){
     /*
-     * Permet de renommer le titre d'une colonne
+     * Permet de renommer le titre d'une colonne d'un cdataframe donné en paramètre
      */
     int index;
     do {
@@ -462,6 +494,9 @@ int search_value(CDataframe *dataframe, void *value, ENUM_TYPE type) {
 }
 
 void search(CDataframe* cdataframe) {
+    /*
+     * Fonction qui permet d'afficher une valeur spécifique d'un cdatframe donné en paramètre ou bien modifier la valeur
+     */
     if (cdataframe == NULL) {
         printf("ERREUR");
         exit(EXIT_FAILURE);
@@ -567,12 +602,18 @@ void search(CDataframe* cdataframe) {
 }
 
 void print_name(CDataframe* cdataframe){
+    /*
+     * Fonction qui permet d'afficher les noms de chaque colonnes d'un cdataframe donné en paramètre
+     */
     for(int i = 0; i<cdataframe->num_columns; i++){
         printf("Titre de la colonne %d : %s\n", i+1,cdataframe->columns[i]->name);
     }
 }
 
 void print_num_raw(CDataframe* cdataframe){
+    /*
+     * Fonction qui permet le nombre de lignes pour chaque colonnes d'un cdataframe donné en paramètre
+     */
     if(cdataframe == NULL){
         printf("ERREUR");
         exit(EXIT_FAILURE);
@@ -583,6 +624,9 @@ void print_num_raw(CDataframe* cdataframe){
 }
 
 void print_num_col(CDataframe* cdataframe){
+    /*
+     * Fonction qui permet d'afficher le nombre de colonnes d'un cdataframe donné en paramètre
+     */
     if(cdataframe == NULL){
         printf("ERREUR");
         exit(EXIT_FAILURE);
@@ -591,6 +635,10 @@ void print_num_col(CDataframe* cdataframe){
 }
 
 int research_cel_equal(CDataframe* df, void* value, ENUM_TYPE type) {
+    /*
+     * Fonction qui permet d'afficher le nombre d'occurrence d'une variable donnée en paramètre
+     * Précision du type de variable dans les paramètre
+     */
     int count = 0;
     for (int col_idx = 0; col_idx < df->num_columns; col_idx++) {
         COLUMN* col = df->columns[col_idx];
@@ -600,6 +648,10 @@ int research_cel_equal(CDataframe* df, void* value, ENUM_TYPE type) {
 }
 
 int research_cel_sup(CDataframe* df, void* value, ENUM_TYPE type) {
+    /*
+     * Fonction qui permet d'afficher le nombre d'occurrence de variables supérieures à celle donnée en paramètre
+     * Précision du type de variable dans les paramètre
+     */
     int count = 0;
     for (int col_idx = 0; col_idx < df->num_columns; col_idx++) {
         COLUMN* col = df->columns[col_idx];
@@ -609,6 +661,10 @@ int research_cel_sup(CDataframe* df, void* value, ENUM_TYPE type) {
 }
 
 int research_cel_inf(CDataframe* df, void* value, ENUM_TYPE type) {
+    /*
+     * Fonction qui permet d'afficher le nombre d'occurrence de variables inférieures à celle donnée en paramètre
+     * Précision du type de variable dans les paramètre
+     */
     int count = 0;
     for (int col_idx = 0; col_idx < df->num_columns; col_idx++) {
         COLUMN* col = df->columns[col_idx];
