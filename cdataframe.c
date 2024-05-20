@@ -383,7 +383,11 @@ void delete_columncdf(CDataframe* cdataframe) {
     cdataframe->num_columns--;
 }
 
+
 void rename_title(CDataframe* cdataframe){
+    /*
+     * Permet de renommer le titre d'une colonne
+     */
     int index;
     do {
         printf("Entrez l'indice de la colonne à modifier : ");
@@ -448,12 +452,6 @@ int search_value(CDataframe *dataframe, void *value, ENUM_TYPE type) {
                         return 1;
                     }
                     break;
-                case STRUCTURE:
-                    // Comparaison des structures - dépend de la structure spécifique
-                    if (col->data[j]->struct_value == value) {
-                        return 1;
-                    }
-                    break;
                 default:
                     printf("Type de colonne non pris en charge.\n");
                     return 0;
@@ -478,14 +476,9 @@ void search(CDataframe* cdataframe) {
     } while (option < 0 || option > 1);
 
     int num_raw, num_col;
-    printf("Entrez l'indice de la colonne et de la ligne sous la forme [colonne ligne]: ");
-    scanf("[%d %d]", &num_col, &num_raw);
+    printf("Entrez l'indice de la colonne et de la ligne sous la forme colonne ligne: \n");
+    scanf("%d %d", &num_col, &num_raw);
     printf("\n");
-
-    if (num_col >= cdataframe->num_columns || num_raw >= cdataframe->columns[num_col]->TL) {
-        printf("ERREUR : Indice de colonne ou de ligne non valide.\n");
-        return;
-    }
 
     COLUMN *col = cdataframe->columns[num_col];
 
