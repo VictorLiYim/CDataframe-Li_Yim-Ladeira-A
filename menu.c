@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cdataframe.h"
-/*
+
 void menu(){
     int continuer = 1, option, num_columns, choix;
-    while(continuer){
+    while (continuer) {
         printf("Création d'un CDataframe : \n");
         printf("Entrez le nombre de colonnes que vous souhaitez afficher: ");
         scanf("%d", &num_columns);
-        CDataframe* cdataframe = create_CDataframe(num_columns); //création de colonnes tout en les nommant
+        CDataframe *cdataframe = create_CDataframe(num_columns); //création de colonnes tout en les nommant
         printf("Remplissage des colonnes : \n");
         read_CDataframe(cdataframe);
-        while(option != 6){
+        while (option != 6) {
             printf("Saisissez l'opération que vous souhaitez faire : \n"
                    "1- Ajouter (colonnes / lignes)\n"
                    "2- Supprimer (colonnes / lignes)\n"
@@ -20,18 +20,17 @@ void menu(){
                    "5- Analyser (recherche de valeurs ou d'occurrences)\n"
                    "6- Quitter\n");
             scanf("%d", &option);
-            switch(option){
+            switch (option) {
                 case 1:
                     do {
                         printf("Que souhaitez-vous ajouter : \n"
                                "-1 Colonne\n"
                                "-2 Ligne\n");
                         scanf("%d", &choix);
-                    }while(choix < 1 && choix > 2);
-                    if(choix ==  1){
+                    } while (choix < 1 && choix > 2);
+                    if (choix == 1) {
                         add_column(cdataframe);
-                    }
-                    else if(choix == 2){
+                    } else if (choix == 2) {
                         add_raw(cdataframe);
                     }
                     break;
@@ -41,11 +40,10 @@ void menu(){
                                "-1 Colonne\n"
                                "-2 Ligne\n");
                         scanf("%d", &choix);
-                    }while(choix < 1 && choix > 2);
-                    if(choix ==  1){
+                    } while (choix < 1 && choix > 2);
+                    if (choix == 1) {
                         delete_columncdf(cdataframe);
-                    }
-                    else if(choix == 2){
+                    } else if (choix == 2) {
                         delete_raw(cdataframe);
                     }
                     break;
@@ -59,23 +57,18 @@ void menu(){
                                "-5 Le nombre de lignes\n"
                                "-6 Le nombre de colonnes\n");
                         scanf("%d", &choix);
-                    }while(choix < 1 && choix > 6);
-                    if(choix ==  1){
+                    } while (choix < 1 && choix > 6);
+                    if (choix == 1) {
                         print_CDataframe_limited_columns(cdataframe);
-                    }
-                    else if(choix == 2){
+                    } else if (choix == 2) {
                         print_CDataframe_limited_raw(cdataframe);
-                    }
-                    else if(choix == 3){
+                    } else if (choix == 3) {
                         print_CDataframe(cdataframe);
-                    }
-                    else if(choix == 4){
+                    } else if (choix == 4) {
                         print_name(cdataframe);
-                    }
-                    else if(choix == 5){
+                    } else if (choix == 5) {
                         print_num_raw(cdataframe);
-                    }
-                    else if(choix == 6){
+                    } else if (choix == 6) {
                         print_num_col(cdataframe);
                     }
                     break;
@@ -86,12 +79,10 @@ void menu(){
                                "-2 le titre d'une colonne\n");
                         scanf("%d", &choix);
 
-                    }while(choix < 1 && choix > 2);
-                    if(choix == 1){
-
-                        search(cdataframe, value, type);
-                    }
-                    else if(choix == 2){
+                    } while (choix < 1 && choix > 2);
+                    if (choix == 1) {
+                        search(cdataframe);
+                    } else if (choix == 2) {
                         rename_title(cdataframe);
                     }
                     break;
@@ -103,31 +94,35 @@ void menu(){
                                "-3 Nombre de valeurs inférieures\n"
                                "-4 Vérifier l'existence d'une valeur\n");
                         scanf("%d", &choix);
-                    }while(choix < 1 && choix > 4);
-                    int x;
-                    printf("Entrez la valeur que vous cherchez : ");
-                    scanf("%d", &x);
-                    if(choix == 1){
-                        research_cel_equal(cdataframe, x);
-                    }
-                    else if(choix == 2){
-                        research_cel_sup(cdataframe, x);
-                    }
-                    else if(choix ==  3){
-                        research_cel_inf(cdataframe, x);
-                    }
-                    else if(choix == 4){
-                        int verif = verify(cdataframe, x);
-                        if(verif){
+                    } while (choix < 1 && choix > 4);
+                    int x, type;
+                    do {
+                        printf("Quel type de donnée recherchez vous :\n"
+                               "-1 UINT\n"
+                               "-2 INT\n"
+                               "-3 CHAR\n"
+                               "-4 FLOAT\n"
+                               "-5 DOUBLE\n"
+                               "-6 STRING\n");
+                        scanf("%d", &type);
+                    }while(type<1 || type >6);
+                    if (choix == 1) {
+                        research_cel_equal(cdataframe, &x, type+1);
+                    } else if (choix == 2) {
+                        research_cel_sup(cdataframe, &x, type+1);
+                    } else if (choix == 3) {
+                        research_cel_inf(cdataframe, &x, type+1);
+                    } else if (choix == 4) {
+                        int verif = search_value(cdataframe, &x, type+1);
+                        if (verif) {
                             printf("La valeur %d que vous recherchez existe", x);
-                        }
-                        else{
-                            printf("%d n'existe pas", x);
+                        } else {
+                            printf("La valeur que vous recherchez n'existe pas.");
                         }
                     }
                     break;
                 case 6:
-                    printf("fin");
+                    printf("Vous avez quittez le menu");
                     break;
                 default:
                     printf("Vous n'avez pas sélectionné la bonne option\n");
@@ -135,11 +130,8 @@ void menu(){
         }
         continuer = 0;
         for (int i = 0; i < cdataframe->num_columns; i++) {
-            free(cdataframe->columns[i]->data);
-            free(cdataframe->columns[i]->name);
-            free(cdataframe->columns[i]);
+            delete_column(&cdataframe->columns[i]);
         }
         free(cdataframe->columns);
-        free(cdataframe);
     }
-}*/
+}
