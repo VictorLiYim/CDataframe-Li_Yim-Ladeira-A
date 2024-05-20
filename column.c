@@ -19,6 +19,8 @@ COLUMN *create_column(ENUM_TYPE type, char* title)
     col->name = strdup(title);
     col->data = NULL;
     col->index = NULL;
+    col->valid_index = 0; // Colonne non triée
+    col->sort_dir = 0;
     return col;
 }
 
@@ -352,4 +354,59 @@ int research_inf(COLUMN *col, void *value) {
         }
     }
     return count;
+}
+
+void void_insertion_sort(COLUMN* col, int gauche, int droite) {
+    for (int i = gauche + 1; i <= droite; i++) {
+        void* k = col->data[i];
+        int j = i - 1;
+
+        int position = research_sup(col, &k);
+
+        while (j >= gauche && j >= position) {
+            col->data[j + 1] = col->data[j];
+            j--;
+        }
+        col->data[j + 1] = k;
+    }
+}
+
+int void_partition(COLUMN* col, int gauche, int droite) {
+    void* pivot = col->data[droite];
+    int i = gauche - 1;
+
+    int pivot_position = research_inf(col, &pivot);
+
+    for (int j = gauche; j <= droite - 1; j++) {
+        if (research_inf(col, &col->data[j]) <= pivot_position) {
+            i++;
+            void* temp = col->data[i];
+            col->data[i] = col->data[j];
+            col->data[j] = temp;
+        }
+    }
+
+    void* temp = col->data[i + 1];
+    col->data[i + 1] = col->data[droite];
+    col->data[droite] = temp;
+
+    return (i + 1);
+}
+
+void void_quicksort(COLUMN* col, int gauche, int droite) {
+    if (gauche < droite) {
+        int pi = void_partition(col, gauche, droite);
+        void_quicksort(col, gauche, pi - 1);
+        void_quicksort(col, pi + 1, droite);
+    }
+}
+
+void void_sort(COLUMN* col, int gauche, int droite) {
+    if (col->valid_index == 0) {
+        // La colonne n'est pas du tout triée, appliquer Quicksort
+        void_quicksort(col, gauche, droite);
+    } else if (col->valid_index == -1) {
+        // La colonne est partiellement triée, appliquer le tri par insertion
+        void_insertion_sort(col, gauche, droite);
+    }
 }

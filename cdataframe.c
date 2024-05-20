@@ -187,7 +187,7 @@ void add_raw(CDataframe* cdataframe) {
         switch (cdataframe->columns[i]->type) {
             case UINT: {
                 unsigned int value;
-                printf("Entrez la valeur de la colonne : %d\n", cdataframe->columns[i]->name);
+                printf("Entrez la valeur de la colonne : %s\n", cdataframe->columns[i]->name);
                 scanf("%u", &value);
                 insert_value(cdataframe->columns[i], &value);
                 break;
@@ -256,7 +256,6 @@ void add_column(CDataframe* cdataframe) {
         exit(EXIT_FAILURE);
     }
     char title[50];
-    int nb_val;
     int type;
     do {
         printf("Saisissez le type que vous souhaitez utiliser pour cette nouvelle colonne :\n"

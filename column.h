@@ -2,6 +2,8 @@
 #define CDATAFRAME_LI_YIM_LADEIRA_A_COLUMN_H
 
 #define REALLOC_SIZE 256
+#define ASC  0
+#define DESC 1
 
 typedef enum
 {
@@ -27,6 +29,8 @@ typedef struct
     ENUM_TYPE type;
     COL_TYPE **data;
     unsigned long long int *index;
+    int valid_index;
+    int sort_dir;
 }COLUMN;
 
 COLUMN *create_column(ENUM_TYPE type, char* title);
@@ -42,4 +46,14 @@ int research_sup(COLUMN* col, void* x);
 int research_inf(COLUMN* col, void* x);
 int research_equal(COLUMN* col, void* x);
 
+// Tri
+
+void sort(COLUMN* col, int sort_dir);
+int void_partition(COLUMN* col, int gauche, int droite);
+void void_insertion_sort(COLUMN* col, int gauche, int droite);
+void void_quicksort(COLUMN* col, int gauche, int droite);
+void print_col_by_index(COLUMN *col);
+void erase_index(COLUMN* col);
+int check_index(COLUMN* col);
+void update_index(COLUMN* col);
 #endif //CDATAFRAME_LI_YIM_LADEIRA_A_COLUMN_H
