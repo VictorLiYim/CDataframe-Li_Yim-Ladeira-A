@@ -49,11 +49,12 @@ int research_equal(COLUMN* col, void* x);
 // Tri
 
 void sort(COLUMN* col, int sort_dir);
-int void_partition(COLUMN* col, int gauche, int droite);
-void void_insertion_sort(COLUMN* col, int gauche, int droite);
-void void_quicksort(COLUMN* col, int gauche, int droite);
+int partition(COLUMN* col, int gauche, int droite, int sort_dir);
+void insertion_sort(COLUMN* col, int gauche, int droite, int sort_dir);
+void quicksort(COLUMN* col, int gauche, int droite, int sort_dir);
 void print_col_by_index(COLUMN *col);
 void erase_index(COLUMN* col);
 int check_index(COLUMN* col);
 void update_index(COLUMN* col);
+int search_value_in_column(COLUMN *col, void *val);
 #endif //CDATAFRAME_LI_YIM_LADEIRA_A_COLUMN_H

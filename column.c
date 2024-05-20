@@ -152,7 +152,7 @@ void print_col(COLUMN* col) {
     /*
      * Fonction qui affiche tout le contenu d'une colonne donnée en paramètre
      */
-    printf("[NAME] %s\n", col->name);
+    printf("%s : \n", col->name);
     for (unsigned int i = 0; i < col->TL; i++) {
         char str[256];
         convert_value(col, i, str, sizeof(str));
@@ -356,57 +356,227 @@ int research_inf(COLUMN *col, void *value) {
     return count;
 }
 
-void void_insertion_sort(COLUMN* col, int gauche, int droite) {
-    for (int i = gauche + 1; i <= droite; i++) {
-        void* k = col->data[i];
+// Fonction de tri par insertion
+void insertion_sort(COLUMN* col, int left, int right, int sort_dir) {
+    for (int i = left + 1; i <= right; i++) {
+        unsigned long long int index = col->index[i];
+        void* key = col->data[index];
         int j = i - 1;
 
-        int position = research_sup(col, &k);
-
-        while (j >= gauche && j >= position) {
-            col->data[j + 1] = col->data[j];
-            j--;
+        // Comparaison et déplacement des éléments
+        while (j >= left) {
+            void* currentValue = col->data[col->index[j]];
+            if ((sort_dir == ASC && col->type == UINT && *((unsigned int*)currentValue) > *((unsigned int*)key)) ||
+                (sort_dir == DESC && col->type == UINT && *((unsigned int*)currentValue) < *((unsigned int*)key))) {
+                col->index[j + 1] = col->index[j];
+                j--;
+            } else if ((sort_dir == ASC && col->type == INT && *((int*)currentValue) > *((int*)key)) ||
+                       (sort_dir == DESC && col->type == INT && *((int*)currentValue) < *((int*)key))) {
+                col->index[j + 1] = col->index[j];
+                j--;
+            } else if ((sort_dir == ASC && col->type == CHAR && *((char*)currentValue) > *((char*)key)) ||
+                       (sort_dir == DESC && col->type == CHAR && *((char*)currentValue) < *((char*)key))) {
+                col->index[j + 1] = col->index[j];
+                j--;
+            } else if ((sort_dir == ASC && col->type == FLOAT && *((float*)currentValue) > *((float*)key)) ||
+                       (sort_dir == DESC && col->type == FLOAT && *((float*)currentValue) < *((float*)key))) {
+                col->index[j + 1] = col->index[j];
+                j--;
+            } else if ((sort_dir == ASC && col->type == DOUBLE && *((double*)currentValue) > *((double*)key)) ||
+                       (sort_dir == DESC && col->type == DOUBLE && *((double*)currentValue) < *((double*)key))) {
+                col->index[j + 1] = col->index[j];
+                j--;
+            } else {
+                break;
+            }
         }
-        col->data[j + 1] = k;
+        col->index[j + 1] = index;
     }
 }
 
-int void_partition(COLUMN* col, int gauche, int droite) {
-    void* pivot = col->data[droite];
-    int i = gauche - 1;
+// Fonction de tri rapide
+void quicksort(COLUMN* col, int left, int right, int sort_dir) {
+    if (left < right) {
+        unsigned long long int pivotIndex = partition(col, left, right, sort_dir);
+        quicksort(col, left, pivotIndex - 1, sort_dir);
+        quicksort(col, pivotIndex + 1, right, sort_dir);
+    }
+}
 
-    int pivot_position = research_inf(col, &pivot);
+// Fonction de partitionnement pour le tri rapide
+int partition(COLUMN* col, int left, int right, int sort_dir) {
+    unsigned long long int pivotIndex = col->index[right];
+    void* pivotValue = col->data[pivotIndex];
+    int i = left - 1;
 
-    for (int j = gauche; j <= droite - 1; j++) {
-        if (research_inf(col, &col->data[j]) <= pivot_position) {
+    for (int j = left; j < right; j++) {
+        void* currentValue = col->data[col->index[j]];
+        int comparisonResult;
+
+        // Comparaison des chaînes de caractères
+        if (col->type == STRING) {
+            char* currentString = (char*)currentValue;
+            char* pivotString = (char*)pivotValue;
+
+            if (sort_dir == ASC) {
+                comparisonResult = strcmp(currentString, pivotString);
+            } else {
+                comparisonResult = strcmp(pivotString, currentString);
+            }
+        } else {
+            // Comparaison des autres types de données
+            if (col->type == UINT) {
+                comparisonResult = (*((unsigned int*)currentValue) <= *((unsigned int*)pivotValue)) ? -1 : 1;
+            } else if (col->type == INT) {
+                comparisonResult = (*((int*)currentValue) <= *((int*)pivotValue)) ? -1 : 1;
+            } else if (col->type == CHAR) {
+                comparisonResult = (*((char*)currentValue) <= *((char*)pivotValue)) ? -1 : 1;
+            } else if (col->type == FLOAT) {
+                comparisonResult = (*((float*)currentValue) <= *((float*)pivotValue)) ? -1 : 1;
+            } else if (col->type == DOUBLE) {
+                comparisonResult = (*((double*)currentValue) <= *((double*)pivotValue)) ? -1 : 1;
+            }
+        }
+
+        // Vérification du sens de tri
+        if ((sort_dir == ASC && comparisonResult <= 0) || (sort_dir == DESC && comparisonResult >= 0)) {
             i++;
-            void* temp = col->data[i];
-            col->data[i] = col->data[j];
-            col->data[j] = temp;
+            unsigned long long int temp = col->index[i];
+            col->index[i] = col->index[j];
+            col->index[j] = temp;
         }
     }
 
-    void* temp = col->data[i + 1];
-    col->data[i + 1] = col->data[droite];
-    col->data[droite] = temp;
+    // Échange du pivot avec l'élément à la position i+1
+    unsigned long long int temp = col->index[i + 1];
+    col->index[i + 1] = col->index[right];
+    col->index[right] = temp;
 
-    return (i + 1);
+    return i + 1;
 }
 
-void void_quicksort(COLUMN* col, int gauche, int droite) {
-    if (gauche < droite) {
-        int pi = void_partition(col, gauche, droite);
-        void_quicksort(col, gauche, pi - 1);
-        void_quicksort(col, pi + 1, droite);
+
+
+void sort(COLUMN* col, int sort_dir) {
+    if (col == NULL || col->index == NULL) {
+        printf("La colonne ou l'index est vide.\n");
+        return;
+    }
+    // Vérifier si la colonne est partiellement triée
+    if (col->valid_index == -1) {
+        insertion_sort(col, 0, col->TL - 1, sort_dir);
+    } else {
+        quicksort(col, 0, col->TL - 1, sort_dir);
+    }
+
+    // Mettre à jour la direction de tri
+    col->sort_dir = sort_dir;
+}
+
+void print_col_by_index(COLUMN *col) {
+    if (col == NULL) {
+        printf("Column is NULL\n");
+        return;
+    }
+
+    printf("[NAME] %s\n", col->name);
+
+    // Parcourir l'index et afficher les valeurs dans l'ordre spécifié
+    for (unsigned long long int i = 0; i < col->TL; i++) {
+        unsigned long long int index = col->index[i];
+        void *value = col->data[index];
+
+        // Convertir la valeur en chaîne de caractères et l'afficher
+        char str[50];
+        convert_value(col, index, str, sizeof(str));
+        printf("[%llu] %s\n", index, str);
     }
 }
 
-void void_sort(COLUMN* col, int gauche, int droite) {
-    if (col->valid_index == 0) {
-        // La colonne n'est pas du tout triée, appliquer Quicksort
-        void_quicksort(col, gauche, droite);
-    } else if (col->valid_index == -1) {
-        // La colonne est partiellement triée, appliquer le tri par insertion
-        void_insertion_sort(col, gauche, droite);
+void erase_index(COLUMN *col) {
+    if (col == NULL || col->index == NULL) {
+        return; // Rien à faire si l'index est déjà NULL ou la colonne est NULL
     }
+
+    // Libérer la mémoire allouée pour le tableau des index
+    free(col->index);
+
+    // Mise à jour des attributs
+    col->index = NULL;
+    col->valid_index = 0;
+}
+
+
+int check_index(COLUMN *col) {
+    if (col == NULL || col->index == NULL) {
+        return 0; // Aucun index trouvé si la colonne ou son index sont NULL
+    }
+
+    if (col->valid_index == -1) {
+        return -1; // Index invalide
+    }
+
+    return 1; // Index valide trouvé
+}
+void update_index(COLUMN *col) {
+    if (col == NULL || col->data == NULL || col->TL == 0) {
+        printf("ERREUR");
+        exit(EXIT_FAILURE);
+    }
+    // Vérifier si l'index existe
+    if (!check_index(col)) {
+        sort(col, ASC); // Si l'index n'existe pas, trier la colonne en ordre ascendant
+    } else {
+        // Si l'index existe, le mettre à jour en triant la colonne en ordre ascendant
+        erase_index(col); // Supprimer l'index actuel
+        sort(col, ASC); // Trier la colonne pour créer un nouvel index
+    }
+}
+
+int search_value_in_column(COLUMN *col, void *val) {
+    if (col == NULL || col->data == NULL || col->TL == 0 || !check_index(col)) {
+        return -1; // Colonnes non triées ou index inexistant, impossible de faire une recherche dichotomique
+    }
+    // Recherche dichotomique
+    unsigned long long int left = 0;
+    unsigned long long int right = col->TL - 1;
+    while (left <= right) {
+        unsigned long long int mid = (left + right) / 2;
+        int cmp;
+        switch (col->type) {
+            case UINT:
+                cmp = (*((unsigned int *)col->data[col->index[mid]]) > *((unsigned int *)val)) - (*((unsigned int *)col->data[col->index[mid]]) < *((unsigned int *)val));
+                break;
+            case INT:
+                cmp = (*((int *)col->data[col->index[mid]]) > *((int *)val)) - (*((int *)col->data[col->index[mid]]) < *((int *)val));
+                break;
+            case CHAR:
+                cmp = (*((char *)col->data[col->index[mid]]) > *((char *)val)) - (*((char *)col->data[col->index[mid]]) < *((char *)val));
+                break;
+            case FLOAT:
+                cmp = (*((float *)col->data[col->index[mid]]) > *((float *)val)) - (*((float *)col->data[col->index[mid]]) < *((float *)val));
+                break;
+            case DOUBLE:
+                cmp = (*((double *)col->data[col->index[mid]]) > *((double *)val)) - (*((double *)col->data[col->index[mid]]) < *((double *)val));
+                break;
+            case STRING:
+                cmp = strcmp(col->data[col->index[mid]], (char *)val);
+                break;
+            case STRUCTURE:
+                // Comparaison de structures non implémentée ici
+                return -1;
+            default:
+                return -1;
+        }
+
+        if (cmp == 0) {
+            return 1; // La valeur a été trouvée
+        } else if (cmp < 0) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+
+    return 0; // La valeur n'a pas été trouvée
 }

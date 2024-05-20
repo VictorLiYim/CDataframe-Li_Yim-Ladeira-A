@@ -53,9 +53,10 @@ void menu(){
                                "-3 CDataframe complet\n"
                                "-4 Noms des colonnes\n"
                                "-5 Le nombre de lignes\n"
-                               "-6 Le nombre de colonnes\n");
+                               "-6 Le nombre de colonnes\n"
+                               "-7 Le CDataframe trié\n");
                         scanf("%d", &choix);
-                    } while (choix < 1 && choix > 6);
+                    } while (choix < 1 && choix > 7);
                     if (choix == 1) {
                         print_CDataframe_limited_columns(cdataframe);
                     } else if (choix == 2) {
@@ -68,6 +69,10 @@ void menu(){
                         print_num_raw(cdataframe);
                     } else if (choix == 6) {
                         print_num_col(cdataframe);
+                    } else if(choix == 7){
+                        for(int i = 0; i <cdataframe->num_columns; i++) {
+                            print_col_by_index(cdataframe->columns[i]);
+                        }
                     }
                     break;
                 case 4:
@@ -75,7 +80,7 @@ void menu(){
                         printf("Que souhaitez-vous modifier : \n"
                                "-1 une valeur spécifique\n"
                                "-2 le titre d'une colonne\n"
-                               "-3 Trier une colonne");
+                               "-3 Trier une colonne\n");
                         scanf("%d", &choix);
 
                     } while (choix < 1 && choix > 3);
@@ -85,7 +90,9 @@ void menu(){
                         rename_title(cdataframe);
                     }
                     else if(choix == 3){
-                        printf("Dans quel ordre voulez vous le trier 1 - ascendant ou 2 - descendant");
+                        printf("Dans quel ordre voulez vous le trier\n"
+                               "-1 ascendant\n"
+                               "-2 descendant\n");
                         int tri;
                         scanf("%d", &tri);
                         if(tri == 1){
@@ -106,7 +113,8 @@ void menu(){
                                "-1 Nombre de valeurs égale\n"
                                "-2 Nombre de valeurs supérieures\n"
                                "-3 Nombre de valeurs inférieures\n"
-                               "-4 Vérifier l'existence d'une valeur\n");
+                               "-4 Vérifier l'existence d'une valeur\n"
+                               "-5 Une valeur dans une colonne triée non fonctionnelle pour le moment\n");
                         scanf("%d", &choix);
                     } while (choix < 1 && choix > 4);
                     int type;
@@ -305,6 +313,111 @@ void menu(){
                                     printf("La chaine de caractère [%s] que vous recherchez existe\n", str);
                                 } else {
                                     printf("La chaine de cacratère que vous recherchez n'existe pas\n");
+                                }
+                            }
+                        }
+                    } else if(choix == 5){
+                        switch (type) {
+                            case 1: {
+                                for (int i = 0; i < cdataframe->num_columns; i++) {
+                                    COLUMN *col = cdataframe->columns[i];
+                                    if (col->type != type) {
+                                        continue; // On passe les colonnes qui ont un type différent de ce que l'on recherche
+                                    }
+                                    unsigned int x;
+                                    printf("Entrez l'entier non signé que vous cherchez :\n");
+                                    scanf("%u", &x);
+                                    int verif = search_value_in_column(col, &x);
+                                    if (verif) {
+                                        printf("La valeur %u que vous recherchez existe\n", x);
+                                    } else {
+                                        printf("La valeur que vous recherchez n'existe pas.\n");
+                                    }
+                                }
+                            }
+                            case 2: {
+                                for (int i = 0; i < cdataframe->num_columns; i++) {
+                                    COLUMN *col = cdataframe->columns[i];
+                                    if (col->type != type) {
+                                        continue; // On passe les colonnes qui ont un type différent de ce que l'on recherche
+                                    }
+                                    int x;
+                                    printf("Entrez l'entier que vous cherchez :\n");
+                                    scanf("%d", &x);
+                                    int verif = search_value_in_column(col, &x);
+                                    if (verif) {
+                                        printf("La valeur %d que vous recherchez existe\n", x);
+                                    } else {
+                                        printf("La valeur que vous recherchez n'existe pas.\n");
+                                    }
+                                }
+                            }
+                            case 3: {
+                                for (int i = 0; i < cdataframe->num_columns; i++) {
+                                    COLUMN *col = cdataframe->columns[i];
+                                    if (col->type != type) {
+                                        continue; // On passe les colonnes qui ont un type différent de ce que l'on recherche
+                                    }
+                                    char x;
+                                    printf("Entrez le caractère que vous cherchez :\n");
+                                    scanf("%c", &x);
+                                    int verif = search_value_in_column(col, &x);
+                                    if (verif) {
+                                        printf("Le caractère %c que vous recherchez existe\n", x);
+                                    } else {
+                                        printf("Le caractère que vous recherchez n'existe pas.\n");
+                                    }
+                                }
+                            }
+                            case 4: {
+                                for (int i = 0; i < cdataframe->num_columns; i++) {
+                                    COLUMN *col = cdataframe->columns[i];
+                                    if (col->type != type) {
+                                        continue; // On passe les colonnes qui ont un type différent de ce que l'on recherche
+                                    }
+                                    float x;
+                                    printf("Entrez le flottant que vous cherchez :\n");
+                                    scanf("%f", &x);
+                                    int verif = search_value_in_column(col, &x);
+                                    if (verif) {
+                                        printf("La valeur %.2f que vous recherchez existe\n", x);
+                                    } else {
+                                        printf("La valeur que vous recherchez n'existe pas.\n");
+                                    }
+                                }
+                            }
+                            case 5: {
+                                for (int i = 0; i < cdataframe->num_columns; i++) {
+                                    COLUMN *col = cdataframe->columns[i];
+                                    if (col->type != type) {
+                                        continue; // On passe les colonnes qui ont un type différent de ce que l'on recherche
+                                    }
+                                    double x;
+                                    printf("Entrez le double que vous cherchez :\n");
+                                    scanf("%ld", &x);
+                                    int verif = search_value_in_column(col, &x);
+                                    if (verif) {
+                                        printf("La valeur %.2ld que vous recherchez existe\n", x);
+                                    } else {
+                                        printf("La valeur que vous recherchez n'existe pas.\n");
+                                    }
+                                }
+                            }
+                            case 6: {
+                                for (int i = 0; i < cdataframe->num_columns; i++) {
+                                    COLUMN *col = cdataframe->columns[i];
+                                    if (col->type != type) {
+                                        continue; // On passe les colonnes qui ont un type différent de ce que l'on recherche
+                                    }
+                                    char str[50];
+                                    printf("Entrez l'entier non signé que vous cherchez :\n");
+                                    scanf("%u", str);
+                                    int verif = search_value_in_column(col, str);
+                                    if (verif) {
+                                        printf("La valeur %s que vous recherchez existe\n", str);
+                                    } else {
+                                        printf("La valeur que vous recherchez n'existe pas.\n");
+                                    }
                                 }
                             }
                         }

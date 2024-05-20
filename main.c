@@ -1,4 +1,5 @@
-#include "menu.c"
+#include "menu.h"
+#include <stdio.h>
 int main() {
     menu();
     return 0;
