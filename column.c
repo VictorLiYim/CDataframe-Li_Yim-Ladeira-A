@@ -403,7 +403,6 @@ void quicksort(COLUMN* col, int left, int right, int sort_dir) {
     }
 }
 
-// Fonction de partitionnement pour le tri rapide
 int partition(COLUMN* col, int left, int right, int sort_dir) {
     unsigned long long int pivotIndex = col->index[right];
     void* pivotValue = col->data[pivotIndex];
@@ -411,7 +410,7 @@ int partition(COLUMN* col, int left, int right, int sort_dir) {
 
     for (int j = left; j < right; j++) {
         void* currentValue = col->data[col->index[j]];
-        int comparisonResult;
+        int compare_res = 0;
 
         // Comparaison des chaînes de caractères
         if (col->type == STRING) {
@@ -419,27 +418,95 @@ int partition(COLUMN* col, int left, int right, int sort_dir) {
             char* pivotString = (char*)pivotValue;
 
             if (sort_dir == ASC) {
-                comparisonResult = strcmp(currentString, pivotString);
+                if (strcmp(currentString, pivotString) <= 0) {
+                    compare_res = -1;
+                } else {
+                    compare_res = 1;
+                }
             } else {
-                comparisonResult = strcmp(pivotString, currentString);
+                if (strcmp(pivotString, currentString) <= 0) {
+                    compare_res = -1;
+                } else {
+                    compare_res = 1;
+                }
             }
         } else {
             // Comparaison des autres types de données
             if (col->type == UINT) {
-                comparisonResult = (*((unsigned int*)currentValue) <= *((unsigned int*)pivotValue)) ? -1 : 1;
+                if (sort_dir == ASC) {
+                    if (*((unsigned int*)currentValue) <= *((unsigned int*)pivotValue)) {
+                        compare_res = -1;
+                    } else {
+                        compare_res = 1;
+                    }
+                } else {
+                    if (*((unsigned int*)currentValue) >= *((unsigned int*)pivotValue)) {
+                        compare_res = -1;
+                    } else {
+                        compare_res = 1;
+                    }
+                }
             } else if (col->type == INT) {
-                comparisonResult = (*((int*)currentValue) <= *((int*)pivotValue)) ? -1 : 1;
+                if (sort_dir == ASC) {
+                    if (*((int*)currentValue) <= *((int*)pivotValue)) {
+                        compare_res = -1;
+                    } else {
+                        compare_res = 1;
+                    }
+                } else {
+                    if (*((int*)currentValue) >= *((int*)pivotValue)) {
+                        compare_res = -1;
+                    } else {
+                        compare_res = 1;
+                    }
+                }
             } else if (col->type == CHAR) {
-                comparisonResult = (*((char*)currentValue) <= *((char*)pivotValue)) ? -1 : 1;
+                if (sort_dir == ASC) {
+                    if (*((char*)currentValue) <= *((char*)pivotValue)) {
+                        compare_res = -1;
+                    } else {
+                        compare_res = 1;
+                    }
+                } else {
+                    if (*((char*)currentValue) >= *((char*)pivotValue)) {
+                        compare_res = -1;
+                    } else {
+                        compare_res = 1;
+                    }
+                }
             } else if (col->type == FLOAT) {
-                comparisonResult = (*((float*)currentValue) <= *((float*)pivotValue)) ? -1 : 1;
+                if (sort_dir == ASC) {
+                    if (*((float*)currentValue) <= *((float*)pivotValue)) {
+                        compare_res = -1;
+                    } else {
+                        compare_res = 1;
+                    }
+                } else {
+                    if (*((float*)currentValue) >= *((float*)pivotValue)) {
+                        compare_res = -1;
+                    } else {
+                        compare_res = 1;
+                    }
+                }
             } else if (col->type == DOUBLE) {
-                comparisonResult = (*((double*)currentValue) <= *((double*)pivotValue)) ? -1 : 1;
+                if (sort_dir == ASC) {
+                    if (*((double*)currentValue) <= *((double*)pivotValue)) {
+                        compare_res = -1;
+                    } else {
+                        compare_res = 1;
+                    }
+                } else {
+                    if (*((double*)currentValue) >= *((double*)pivotValue)) {
+                        compare_res = -1;
+                    } else {
+                        compare_res = 1;
+                    }
+                }
             }
         }
 
         // Vérification du sens de tri
-        if ((sort_dir == ASC && comparisonResult <= 0) || (sort_dir == DESC && comparisonResult >= 0)) {
+        if ((sort_dir == ASC && compare_res <= 0) || (sort_dir == DESC && compare_res >= 0)) {
             i++;
             unsigned long long int temp = col->index[i];
             col->index[i] = col->index[j];
@@ -454,7 +521,6 @@ int partition(COLUMN* col, int left, int right, int sort_dir) {
 
     return i + 1;
 }
-
 
 
 void sort(COLUMN* col, int sort_dir) {
@@ -479,14 +545,13 @@ void print_col_by_index(COLUMN *col) {
         return;
     }
 
-    printf("[NAME] %s\n", col->name);
+    printf("%s : \n", col->name);
 
     // Parcourir l'index et afficher les valeurs dans l'ordre spécifié
     for (unsigned long long int i = 0; i < col->TL; i++) {
         unsigned long long int index = col->index[i];
-        void *value = col->data[index];
 
-        // Convertir la valeur en chaîne de caractères et l'afficher
+        // Convertir la valeur en chaîne de caractères et l'afficher comme pour print_col
         char str[50];
         convert_value(col, index, str, sizeof(str));
         printf("[%llu] %s\n", index, str);
@@ -562,9 +627,6 @@ int search_value_in_column(COLUMN *col, void *val) {
             case STRING:
                 cmp = strcmp(col->data[col->index[mid]], (char *)val);
                 break;
-            case STRUCTURE:
-                // Comparaison de structures non implémentée ici
-                return -1;
             default:
                 return -1;
         }
