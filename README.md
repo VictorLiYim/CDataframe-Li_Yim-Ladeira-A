@@ -1,11 +1,37 @@
-CDataframe,
-Victor Li Yim et Evan Ladeira.
+CDataframe
+Victor Li Yim et Evan Ladeira L1 EFREI Groupe A
 
 Lien vers le dépot GitHub : https://github.com/VictorLiYim/CDataframe-Li_Yim-Ladeira-A
 
-Nos objectifs pour la suite du projets : 
+Fonctionnalités principales :
 
-  - Tout d'abord, nous avons pour objectif d'améliorer l'ergonomie du programme en implémentant un menu. Cela facilitera principalement son utilisation,
-  - Ensuite, nous voulons améliorer/perfectionner l'ensemble de nos fonctions afin de réduire le temps d'execution,
-  - Puis, nous avons pour objectif d'avancer le plus possible sur la deuxième partie du projet,
-  - Enfin, si le temps nous le permet, nous allons tenter de commencer la partie 3.
+    Créer un Cdataframe ce qui implique la création d'un nombre n de colonnes
+    Remplissage d'un CDataframe
+    Ajouter des colonnes ou des lignes
+    Afficher :
+      - Tout le CDataframe
+      - Un certain nombre n de colonnes
+      - Un certain nombre n de lignes
+      - Le nombre de lignes
+      - Le nombre de colonnes
+      - Les noms de chaque colonnes
+      - Le CDataframe trié
+    Modifier :
+      - Une valeur en précisant l'indice de la ligne et de la colonne
+      - Trier des colonnes soit par ordre croissant ou décroissant.
+      - Le nom d'une colonne
+    Supprimer :
+      - Une colonne
+      - Une ligne
+    Analyser :
+    — Nombre de cellules contenant une valeur égale à x (x donné en paramètre)
+    — Nombre de cellules contenant une valeur supérieure à x (x donné en paramètre) 
+    — Nombre de cellules contenant une valeur inférieure à x(x donné en paramètre)
+    - Vérifier l'existance d'une valeur
+    - Chercher une valeur dans une colonne triée (ne fonctionne pas pour le moment)
+
+Instructions d'exécution :
+
+    Lancer le programme sur "main",
+    Suivre les instructions écrites en console pour sélectionner l'action souhaitée,
+    Pour quitter le programme, écrire "6".
