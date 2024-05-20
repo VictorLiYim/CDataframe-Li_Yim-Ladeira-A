@@ -24,8 +24,8 @@ Créer un Cdataframe ce qui implique la création d'un nombre n de colonnes
   - Une colonne
   - Une ligne
 - Analyser :
-  — Nombre de cellules contenant une valeur égale à x (x donné en paramètre)
-  — Nombre de cellules contenant une valeur supérieure à x (x donné en paramètre) 
-  — Nombre de cellules contenant une valeur inférieure à x(x donné en paramètre)
+  - Nombre de cellules contenant une valeur égale à x (x donné en paramètre)
+  - Nombre de cellules contenant une valeur supérieure à x (x donné en paramètre) 
+  - Nombre de cellules contenant une valeur inférieure à x(x donné en paramètre)
   - Vérifier l'existance d'une valeur
   - Chercher une valeur dans une colonne triée (ne fonctionne pas pour le moment)
