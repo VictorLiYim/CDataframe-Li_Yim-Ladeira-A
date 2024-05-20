@@ -1,3 +1,9 @@
+CDataframe
+Victor Li Yim et Evan Ladeira L1 EFREI Groupe A
+Lien du github :
+
+https://github.com/VictorLiYim/CDataframe-Li_Yim-Ladeira-A
+
 Créer un Cdataframe ce qui implique la création d'un nombre n de colonnes
 - Remplissage d'un CDataframe
 - Ajouter des colonnes ou des lignes
