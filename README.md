@@ -1,9 +1,3 @@
-CDataframe Victor Li Yim et Evan Ladeira L1 EFREI Groupe A
-
-Lien vers le dépot GitHub : https://github.com/VictorLiYim/CDataframe-Li_Yim-Ladeira-A
-
-Fonctionnalités principales :
-
 Créer un Cdataframe ce qui implique la création d'un nombre n de colonnes
 Remplissage d'un CDataframe
 Ajouter des colonnes ou des lignes
@@ -23,14 +17,8 @@ Supprimer :
   - Une colonne
   - Une ligne
 Analyser :
-— Nombre de cellules contenant une valeur égale à x (x donné en paramètre)
-— Nombre de cellules contenant une valeur supérieure à x (x donné en paramètre) 
-— Nombre de cellules contenant une valeur inférieure à x(x donné en paramètre)
-- Vérifier l'existance d'une valeur
-- Chercher une valeur dans une colonne triée (ne fonctionne pas pour le moment)
-
-Instructions d'exécution :
-
-Lancer le programme sur "main",
-Suivre les instructions écrites en console pour sélectionner l'action souhaitée,
-Pour quitter le programme, écrire "6".
+  — Nombre de cellules contenant une valeur égale à x (x donné en paramètre)
+  — Nombre de cellules contenant une valeur supérieure à x (x donné en paramètre) 
+  — Nombre de cellules contenant une valeur inférieure à x(x donné en paramètre)
+  - Vérifier l'existance d'une valeur
+  - Chercher une valeur dans une colonne triée (ne fonctionne pas pour le moment)
