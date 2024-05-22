@@ -1,6 +1,5 @@
 #ifndef CDATAFRAME_LI_YIM_LADEIRA_A_CDATAFRAME_H
 #define CDATAFRAME_LI_YIM_LADEIRA_A_CDATAFRAME_H
-
 #include "column.h"
 
 typedef struct {
